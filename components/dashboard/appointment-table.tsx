@@ -164,12 +164,17 @@ export function AppointmentTable({
                     </TableCell>
                     <TableCell className="py-3.5 pr-6 text-right">
                       <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="icon" className="h-8 w-8 text-neutral-400 hover:text-neutral-900 rounded-lg">
-                            <MoreHorizontal className="h-4 w-4" />
-                            <span className="sr-only">Open menu</span>
-                          </Button>
-                        </DropdownMenuTrigger>
+                        <DropdownMenuTrigger
+                          render={
+                            <button
+                              type="button"
+                              className="h-8 w-8 flex items-center justify-center text-neutral-400 hover:text-neutral-900 hover:bg-neutral-50 rounded-lg bg-transparent cursor-pointer border-0 outline-hidden"
+                            >
+                              <MoreHorizontal className="h-4 w-4" />
+                              <span className="sr-only">Open menu</span>
+                            </button>
+                          }
+                        />
                         <DropdownMenuContent align="end" className="w-[160px] border border-neutral-100 shadow-lg">
                           <DropdownMenuItem className="text-xs cursor-pointer">
                             View details

@@ -27,9 +27,10 @@ import { cn } from '@/lib/utils';
 
 interface NavbarProps {
   onSearchChange?: (val: string) => void;
+  profileName?: string;
 }
 
-export function Navbar({ onSearchChange }: NavbarProps) {
+export function Navbar({ onSearchChange, profileName = 'Dr. E. Blackwell' }: NavbarProps) {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [notifications, setNotifications] = useState([
@@ -123,19 +124,20 @@ export function Navbar({ onSearchChange }: NavbarProps) {
 
           {/* Notifications Dropdown */}
           <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="relative h-9 w-9 text-neutral-500 hover:text-neutral-900 rounded-lg border border-neutral-100 hover:bg-neutral-50"
-              >
-                <Bell className="h-4 w-4" />
-                {unreadCount > 0 && (
-                  <span className="absolute right-2 top-2 flex h-2 w-2 rounded-full bg-emerald-500 ring-2 ring-white animate-pulse" />
-                )}
-                <span className="sr-only">Notifications</span>
-              </Button>
-            </DropdownMenuTrigger>
+            <DropdownMenuTrigger
+              render={
+                <button
+                  type="button"
+                  className="relative h-9 w-9 flex items-center justify-center text-neutral-500 hover:text-neutral-900 rounded-lg border border-neutral-100 hover:bg-neutral-50 bg-transparent cursor-pointer outline-hidden"
+                >
+                  <Bell className="h-4 w-4" />
+                  {unreadCount > 0 && (
+                    <span className="absolute right-2 top-2 flex h-2 w-2 rounded-full bg-emerald-500 ring-2 ring-white animate-pulse" />
+                  )}
+                  <span className="sr-only">Notifications</span>
+                </button>
+              }
+            />
             <DropdownMenuContent align="end" className="w-[320px] p-2 border border-neutral-100 shadow-xl">
               <div className="flex items-center justify-between px-3 py-1.5">
                 <DropdownMenuLabel className="text-xs font-bold text-neutral-800 p-0">Notifications</DropdownMenuLabel>
@@ -185,8 +187,8 @@ export function Navbar({ onSearchChange }: NavbarProps) {
           </DropdownMenu>
 
           {/* Profile Quick Access */}
-          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-neutral-900 font-semibold text-xs text-white shadow-inner select-none cursor-pointer">
-            EB
+          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-neutral-900 font-semibold text-xs text-white shadow-inner select-none cursor-pointer animate-in fade-in">
+            {profileName.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()}
           </div>
         </div>
       </header>
@@ -210,7 +212,11 @@ export function Navbar({ onSearchChange }: NavbarProps) {
                 <span className="sr-only">Close sidebar</span>
               </Button>
             </div>
-            <Sidebar className="w-full border-r-0" onCloseMobile={() => setMobileMenuOpen(false)} />
+            <Sidebar 
+              className="w-full border-r-0" 
+              onCloseMobile={() => setMobileMenuOpen(false)} 
+              profileName={profileName}
+            />
           </div>
         </div>
       )}

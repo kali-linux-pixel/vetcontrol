@@ -4,6 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
+import { logout } from '@/app/actions/auth';
 import {
   LayoutDashboard,
   Users,
@@ -16,13 +17,26 @@ import {
   ChevronsUpDown,
   LogOut,
 } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 interface SidebarProps {
   className?: string;
   onCloseMobile?: () => void;
+  profileName?: string;
+  clinicName?: string;
 }
 
-export function Sidebar({ className, onCloseMobile }: SidebarProps) {
+export function Sidebar({ 
+  className, 
+  onCloseMobile,
+  profileName = 'Dr. E. Blackwell',
+  clinicName = 'VetControl Downtown'
+}: SidebarProps) {
   const pathname = usePathname();
 
   const menuItems = [
@@ -40,6 +54,19 @@ export function Sidebar({ className, onCloseMobile }: SidebarProps) {
       return pathname === '/';
     }
     return pathname.startsWith(href);
+  };
+
+  const getInitials = (name: string) => {
+    return name
+      .split(' ')
+      .map((n) => n[0])
+      .join('')
+      .substring(0, 2)
+      .toUpperCase();
+  };
+
+  const handleLogout = async () => {
+    await logout();
   };
 
   return (
@@ -91,20 +118,38 @@ export function Sidebar({ className, onCloseMobile }: SidebarProps) {
         })}
       </nav>
 
-      {/* Footer Profile */}
+      {/* Footer Profile Dropdown */}
       <div className="border-t border-neutral-100 pt-4 mt-auto">
-        <div className="flex items-center justify-between rounded-lg p-2 hover:bg-neutral-50 transition-colors duration-150 group cursor-pointer">
-          <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-neutral-100 border border-neutral-200/50 font-bold text-sm text-neutral-700">
-              EB
-            </div>
-            <div className="flex flex-col text-left">
-              <span className="text-xs font-semibold text-neutral-800 leading-tight">Dr. E. Blackwell</span>
-              <span className="text-[10px] text-neutral-400 font-medium leading-none mt-1">Downtown Clinic</span>
-            </div>
-          </div>
-          <ChevronsUpDown className="h-3.5 w-3.5 text-neutral-400 group-hover:text-neutral-600" />
-        </div>
+        <DropdownMenu>
+          <DropdownMenuTrigger
+            render={
+              <button 
+                type="button"
+                className="flex items-center justify-between rounded-lg p-2 hover:bg-neutral-50 transition-colors duration-150 group cursor-pointer w-full border-0 outline-hidden bg-transparent text-left"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-neutral-100 border border-neutral-200/50 font-bold text-sm text-neutral-700">
+                    {getInitials(profileName)}
+                  </div>
+                  <div className="flex flex-col text-left">
+                    <span className="text-xs font-semibold text-neutral-800 leading-tight">{profileName}</span>
+                    <span className="text-[10px] text-neutral-400 font-medium leading-none mt-1">{clinicName}</span>
+                  </div>
+                </div>
+                <ChevronsUpDown className="h-3.5 w-3.5 text-neutral-400 group-hover:text-neutral-600" />
+              </button>
+            }
+          />
+          <DropdownMenuContent align="end" className="w-[200px] border border-neutral-100 shadow-lg">
+            <DropdownMenuItem 
+              onClick={handleLogout}
+              className="text-xs cursor-pointer flex items-center gap-2 text-rose-600 focus:text-rose-700"
+            >
+              <LogOut className="h-3.5 w-3.5" />
+              Sign Out
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </aside>
   );
