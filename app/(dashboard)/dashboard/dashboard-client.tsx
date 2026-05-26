@@ -8,7 +8,7 @@ import { VaccineSchedule } from '@/components/dashboard/vaccine-schedule';
 import { RevenueSummary } from '@/components/dashboard/revenue-summary';
 import { Appointment, InventoryItem, RevenueData } from '@/types';
 import { updateAppointmentStatus } from '@/app/actions/appointments';
-import { Users, PawPrint, Calendar, AlertTriangle, Check, X, ShieldAlert } from 'lucide-react';
+import { Users, PawPrint, Calendar, AlertTriangle, Check, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface DashboardClientProps {
@@ -92,7 +92,7 @@ export default function DashboardClient({
   ];
 
   return (
-    <div className="space-y-6 md:space-y-8 animate-in fade-in duration-300 relative">
+    <div className="space-y-6 md:space-y-8 animate-fade-in relative">
       {/* Welcome header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
@@ -100,6 +100,99 @@ export default function DashboardClient({
           <p className="text-sm text-neutral-500 mt-1">Operational diagnostics and multi-tenant ledger synchronization.</p>
         </div>
       </div>
+
+      {/* Onboarding Checklist Card */}
+      {(() => {
+        const hasClients = clientsCount > 0;
+        const hasPets = petsCount > 0;
+        const hasAppointments = initialAppointments.length > 0;
+        
+        const steps = [
+          { id: 1, label: 'Create Clinic Tenant Account', isCompleted: true, href: '#' },
+          { id: 2, label: 'Register Your First Client', isCompleted: hasClients, href: '/clients' },
+          { id: 3, label: 'Create Patient Pet Profile', isCompleted: hasPets, href: '/pets' },
+          { id: 4, label: 'Schedule First Consultation', isCompleted: hasAppointments, href: '/appointments' },
+        ];
+        
+        const completedSteps = steps.filter(s => s.isCompleted).length;
+        const progressPercentage = Math.round((completedSteps / steps.length) * 100);
+        
+        // Hide onboarding if 100% complete
+        if (progressPercentage === 100) return null;
+
+        return (
+          <div className="bg-white border border-emerald-100 rounded-2xl p-6 shadow-2xs relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 rounded-full blur-2xl pointer-events-none" />
+            
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-2.5 py-0.5 rounded-full uppercase tracking-wider">Onboarding Checklist</span>
+                  <span className="text-xs font-bold text-neutral-400">{completedSteps} of {steps.length} completed</span>
+                </div>
+                <h3 className="text-lg font-bold text-neutral-900">Welcome to VetControl! Let's set up your practice.</h3>
+                <p className="text-xs text-neutral-500 max-w-xl">Follow these quick start steps to configure your clinic and manage your first patient bookings.</p>
+              </div>
+              
+              {/* Progress Circle or Bar */}
+              <div className="flex items-center gap-3 shrink-0">
+                <div className="text-right">
+                  <p className="text-xs font-bold text-neutral-400">Clinic Setup Progress</p>
+                  <p className="text-xl font-black text-neutral-900">{progressPercentage}%</p>
+                </div>
+                <div className="w-16 h-2 bg-neutral-100 rounded-full overflow-hidden">
+                  <div className="bg-emerald-500 h-full rounded-full transition-all duration-500" style={{ width: `${progressPercentage}%` }} />
+                </div>
+              </div>
+            </div>
+            
+            <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-4 mt-6">
+              {steps.map((step) => (
+                <div 
+                  key={step.id} 
+                  className={cn(
+                    "p-3.5 border rounded-xl flex flex-col justify-between h-28 transition-all",
+                    step.isCompleted 
+                      ? "bg-neutral-50/50 border-neutral-100 text-neutral-500" 
+                      : "bg-white border-neutral-200 hover:border-emerald-300 shadow-2xs hover:shadow-xs group cursor-pointer"
+                  )}
+                  onClick={() => {
+                    if (!step.isCompleted && step.href !== '#') {
+                      window.location.href = step.href;
+                    }
+                  }}
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-bold text-neutral-400">Step 0{step.id}</span>
+                    <span className={cn(
+                      "h-4 w-4 rounded-full flex items-center justify-center border text-[9px] font-bold transition-all",
+                      step.isCompleted 
+                        ? "bg-emerald-50 border-emerald-200 text-emerald-600" 
+                        : "border-neutral-200 text-neutral-400 group-hover:border-emerald-500 group-hover:text-emerald-500"
+                    )}>
+                      {step.isCompleted ? '✓' : step.id}
+                    </span>
+                  </div>
+                  
+                  <div className="mt-auto">
+                    <p className={cn(
+                      "text-xs font-semibold leading-tight",
+                      step.isCompleted ? "text-neutral-400 line-through" : "text-neutral-800 group-hover:text-emerald-700"
+                    )}>
+                      {step.label}
+                    </p>
+                    {!step.isCompleted && (
+                      <span className="text-[9px] font-bold text-emerald-600 group-hover:underline mt-1 block">
+                        Get Started →
+                      </span>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      })()}
 
       {/* KPI Stats Cards */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

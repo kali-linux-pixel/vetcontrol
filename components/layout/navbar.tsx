@@ -18,6 +18,7 @@ import { Sidebar } from './sidebar';
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -140,7 +141,9 @@ export function Navbar({ onSearchChange, profileName = 'Dr. E. Blackwell' }: Nav
             />
             <DropdownMenuContent align="end" className="w-[320px] p-2 border border-neutral-100 shadow-xl">
               <div className="flex items-center justify-between px-3 py-1.5">
-                <DropdownMenuLabel className="text-xs font-bold text-neutral-800 p-0">Notifications</DropdownMenuLabel>
+                <DropdownMenuGroup>
+                  <DropdownMenuLabel className="text-xs font-bold text-neutral-800 p-0">Notifications</DropdownMenuLabel>
+                </DropdownMenuGroup>
                 {unreadCount > 0 && (
                   <button 
                     onClick={markAllAsRead} 

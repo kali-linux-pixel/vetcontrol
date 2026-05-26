@@ -49,7 +49,7 @@ export default function SettingsClient({
   };
 
   return (
-    <div className="space-y-6 max-w-4xl animate-in fade-in duration-300">
+    <div className="space-y-6 max-w-4xl animate-fade-in">
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>

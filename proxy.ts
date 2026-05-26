@@ -32,27 +32,32 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const isLoginPage = request.nextUrl.pathname.startsWith('/login');
-  const isAuthCallback = request.nextUrl.pathname.startsWith('/api/auth');
+  const pathname = request.nextUrl.pathname;
+  const isLoginPage = pathname.startsWith('/login');
+  const isSignupPage = pathname.startsWith('/signup');
+  const isLandingPage = pathname === '/';
+  const isAuthCallback = pathname.startsWith('/api/auth');
+
+  const isPublicRoute = isLoginPage || isSignupPage || isLandingPage || isAuthCallback;
 
   // If no user and trying to access protected route, redirect to login
-  if (!user && !isLoginPage && !isAuthCallback) {
+  if (!user && !isPublicRoute) {
     const url = request.nextUrl.clone();
     url.pathname = '/login';
     return NextResponse.redirect(url);
   }
 
-  // If user is logged in and trying to access login page, redirect to home
-  if (user && isLoginPage) {
+  // If user is logged in and trying to access login/signup page, redirect to dashboard
+  if (user && (isLoginPage || isSignupPage)) {
     const url = request.nextUrl.clone();
-    url.pathname = '/';
+    url.pathname = '/dashboard';
     return NextResponse.redirect(url);
   }
 
   return supabaseResponse;
 }
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   return await updateSession(request);
 }
 

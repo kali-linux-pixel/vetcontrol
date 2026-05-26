@@ -3,6 +3,8 @@ import { Sidebar } from '@/components/layout/sidebar';
 import { Navbar } from '@/components/layout/navbar';
 import { createServerClient } from '@/src/lib/supabase';
 import { redirect } from 'next/navigation';
+import { getSubscriptionStatus } from '@/lib/subscription';
+import { TrialBanner } from '@/components/layout/trial-banner';
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -16,6 +18,9 @@ export default async function DashboardLayout({ children }: DashboardLayoutProps
   if (error || !user) {
     redirect('/login');
   }
+
+  // Fetch subscription trial info
+  const statusInfo = await getSubscriptionStatus();
 
   // Fetch user profile and organization info
   let profileName = 'Dr. E. Blackwell';
@@ -48,7 +53,7 @@ export default async function DashboardLayout({ children }: DashboardLayoutProps
   }
 
   return (
-    <div className="flex h-screen w-screen overflow-hidden bg-neutral-50/50">
+    <div className="flex h-screen w-screen overflow-hidden bg-neutral-50/50 font-sans">
       {/* Sidebar - Desktop Only */}
       <Sidebar 
         className="hidden md:flex flex-shrink-0" 
@@ -58,6 +63,9 @@ export default async function DashboardLayout({ children }: DashboardLayoutProps
 
       {/* Main Content Area */}
       <div className="flex flex-1 flex-col overflow-hidden">
+        {/* Sticky Trial Expiration Banner */}
+        <TrialBanner statusInfo={statusInfo} />
+
         {/* Navbar */}
         <Navbar profileName={profileName} />
 

@@ -83,7 +83,7 @@ export default function ClientsClient({ initialClients }: ClientsClientProps) {
   );
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-300 relative">
+    <div className="space-y-6 animate-fade-in relative">
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>

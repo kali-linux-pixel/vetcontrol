@@ -16,6 +16,7 @@ import {
   Shield,
   ChevronsUpDown,
   LogOut,
+  CreditCard,
 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -40,18 +41,19 @@ export function Sidebar({
   const pathname = usePathname();
 
   const menuItems = [
-    { name: 'Dashboard', href: '/', icon: LayoutDashboard },
+    { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
     { name: 'Clients', href: '/clients', icon: Users },
     { name: 'Pets', href: '/pets', icon: PawPrint },
     { name: 'Appointments', href: '/appointments', icon: Calendar },
     { name: 'Inventory', href: '/inventory', icon: Package },
     { name: 'Sales', href: '/sales', icon: DollarSign },
+    { name: 'Billing', href: '/billing', icon: CreditCard },
     { name: 'Settings', href: '/settings', icon: Settings },
   ];
 
   const isActive = (href: string) => {
-    if (href === '/') {
-      return pathname === '/';
+    if (href === '/dashboard') {
+      return pathname === '/dashboard';
     }
     return pathname.startsWith(href);
   };

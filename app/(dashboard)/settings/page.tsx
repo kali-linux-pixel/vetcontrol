@@ -3,6 +3,8 @@ import { createServerClient } from '@/src/lib/supabase';
 import SettingsClient from './settings-client';
 import { redirect } from 'next/navigation';
 
+export const dynamic = 'force-dynamic';
+
 export default async function Page() {
   const supabase = await createServerClient();
 
