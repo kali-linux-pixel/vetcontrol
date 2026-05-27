@@ -26,6 +26,29 @@ interface AppointmentTableProps {
   onStatusChange?: (id: string, newStatus: Appointment['status']) => void;
 }
 
+const translateStatus = (status: string) => {
+  switch (status) {
+    case 'Scheduled': return 'Programada';
+    case 'Checked-in': return 'En Espera';
+    case 'In-Progress': return 'En Curso';
+    case 'Completed': return 'Completada';
+    case 'Cancelled': return 'Cancelada';
+    default: return status;
+  }
+};
+
+const translateType = (type: string) => {
+  switch (type) {
+    case 'Consultation': return 'Consulta';
+    case 'Surgery': return 'Cirugía';
+    case 'Vaccination': return 'Vacunación';
+    case 'Check-up': return 'Control General';
+    case 'Dental': return 'Dental';
+    case 'Grooming': return 'Estética';
+    default: return type;
+  }
+};
+
 export function AppointmentTable({ 
   appointments, 
   limit, 
@@ -80,13 +103,41 @@ export function AppointmentTable({
     }
   };
 
+  const getSpeciesLabel = (species: Appointment['petSpecies']) => {
+    switch (species) {
+      case 'dog': return 'Perro';
+      case 'cat': return 'Gato';
+      case 'rabbit': return 'Conejo';
+      case 'bird': return 'Ave';
+      default: return 'Otro';
+    }
+  };
+
+  const handleWhatsApp = (apt: Appointment, template: 'confirm' | 'reminder' | 'vaccine') => {
+    const rawPhone = apt.ownerPhone || '';
+    const digits = rawPhone.replace(/\D/g, '');
+    const cleanPhone = digits.length === 9 ? '51' + digits : digits;
+    
+    let text = '';
+    if (template === 'confirm') {
+      text = `Hola ${apt.ownerName}, confirmamos la cita de su mascota ${apt.petName} para el ${apt.date} a las ${apt.time} con el ${apt.veterinarian}. ¡Le esperamos! VetControl`;
+    } else if (template === 'reminder') {
+      text = `Hola ${apt.ownerName}, le recordamos la cita programada de su mascota ${apt.petName} para el ${apt.date} a las ${apt.time}. Si tiene algún inconveniente, por favor avísenos. VetControl`;
+    } else if (template === 'vaccine') {
+      text = `Hola ${apt.ownerName}, le recordamos que su mascota ${apt.petName} tiene una vacuna pendiente. Le sugerimos agendar una cita. VetControl`;
+    }
+
+    const url = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(text)}`;
+    window.open(url, '_blank');
+  };
+
   return (
     <Card className="border border-neutral-100 bg-white shadow-xs">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
         <div className="space-y-1">
-          <CardTitle className="text-base font-semibold text-neutral-900">Today's Appointments</CardTitle>
+          <CardTitle className="text-base font-semibold text-neutral-900">Citas del Día</CardTitle>
           <CardDescription className="text-xs text-neutral-500">
-            Monitor patients checked in or scheduled for today
+            Supervisa a los pacientes agendados o en espera para hoy
           </CardDescription>
         </div>
         {onViewAll && (
@@ -96,7 +147,7 @@ export function AppointmentTable({
             onClick={onViewAll} 
             className="text-xs text-neutral-600 hover:text-neutral-900 flex items-center gap-1 h-8"
           >
-            View schedule
+            Ver agenda completa
             <ChevronRight className="h-3.5 w-3.5" />
           </Button>
         )}
@@ -106,12 +157,12 @@ export function AppointmentTable({
           <Table>
             <TableHeader className="bg-neutral-50/50">
               <TableRow className="hover:bg-transparent border-neutral-100">
-                <TableHead className="w-[180px] text-xs font-semibold text-neutral-500 h-10 px-6">Patient</TableHead>
-                <TableHead className="text-xs font-semibold text-neutral-500 h-10">Owner</TableHead>
-                <TableHead className="text-xs font-semibold text-neutral-500 h-10">Time</TableHead>
-                <TableHead className="text-xs font-semibold text-neutral-500 h-10">Type</TableHead>
-                <TableHead className="text-xs font-semibold text-neutral-500 h-10">Status</TableHead>
-                <TableHead className="text-xs font-semibold text-neutral-500 h-10">Veterinarian</TableHead>
+                <TableHead className="w-[180px] text-xs font-semibold text-neutral-500 h-10 px-6">Paciente</TableHead>
+                <TableHead className="text-xs font-semibold text-neutral-500 h-10">Dueño / Cliente</TableHead>
+                <TableHead className="text-xs font-semibold text-neutral-500 h-10">Hora</TableHead>
+                <TableHead className="text-xs font-semibold text-neutral-500 h-10">Tipo</TableHead>
+                <TableHead className="text-xs font-semibold text-neutral-500 h-10">Estado</TableHead>
+                <TableHead className="text-xs font-semibold text-neutral-500 h-10">Médico Veterinario</TableHead>
                 <TableHead className="w-[50px] text-xs font-semibold text-neutral-500 h-10 pr-6 text-right"></TableHead>
               </TableRow>
             </TableHeader>
@@ -120,7 +171,7 @@ export function AppointmentTable({
                 <TableRow>
                   <TableCell colSpan={7} className="h-32 text-center text-sm text-neutral-400">
                     <Calendar className="mx-auto h-8 w-8 text-neutral-300 mb-2" />
-                    No appointments scheduled for today.
+                    No hay citas programadas para hoy.
                   </TableCell>
                 </TableRow>
               ) : (
@@ -132,8 +183,8 @@ export function AppointmentTable({
                           {getSpeciesEmoji(apt.petSpecies)}
                         </div>
                         <div>
-                          <p className="text-sm font-medium text-neutral-900 leading-none">{apt.petName}</p>
-                          <p className="text-xs text-neutral-400 capitalize mt-1 leading-none">{apt.petSpecies}</p>
+                          <p className="text-sm font-semibold text-neutral-900 leading-none">{apt.petName}</p>
+                          <p className="text-xs text-neutral-400 capitalize mt-1 leading-none">{getSpeciesLabel(apt.petSpecies)}</p>
                         </div>
                       </div>
                     </TableCell>
@@ -145,18 +196,18 @@ export function AppointmentTable({
                     </TableCell>
                     <TableCell className="py-3.5">
                       <span className={cn(
-                        "inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium",
+                        "inline-flex items-center rounded-md px-2 py-0.5 text-xs font-semibold",
                         getTypeStyles(apt.type)
                       )}>
-                        {apt.type}
+                        {translateType(apt.type)}
                       </span>
                     </TableCell>
                     <TableCell className="py-3.5">
                       <span className={cn(
-                        "inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium tracking-tight",
+                        "inline-flex items-center rounded-full px-2 py-0.5 text-xs font-bold tracking-tight",
                         getStatusStyles(apt.status)
                       )}>
-                        {apt.status}
+                        {translateStatus(apt.status)}
                       </span>
                     </TableCell>
                     <TableCell className="py-3.5">
@@ -171,39 +222,50 @@ export function AppointmentTable({
                               className="h-8 w-8 flex items-center justify-center text-neutral-400 hover:text-neutral-900 hover:bg-neutral-50 rounded-lg bg-transparent cursor-pointer border-0 outline-hidden"
                             >
                               <MoreHorizontal className="h-4 w-4" />
-                              <span className="sr-only">Open menu</span>
+                              <span className="sr-only">Abrir menú</span>
                             </button>
                           }
                         />
-                        <DropdownMenuContent align="end" className="w-[160px] border border-neutral-100 shadow-lg">
-                          <DropdownMenuItem className="text-xs cursor-pointer">
-                            View details
-                          </DropdownMenuItem>
+                        <DropdownMenuContent align="end" className="w-[180px] border border-neutral-100 shadow-lg">
                           {onStatusChange && (
                             <>
                               <DropdownMenuItem 
                                 onClick={() => onStatusChange(apt.id, 'Checked-in')}
                                 className="text-xs cursor-pointer"
                               >
-                                Mark as Checked-in
+                                Marcar en Espera
                               </DropdownMenuItem>
                               <DropdownMenuItem 
                                 onClick={() => onStatusChange(apt.id, 'In-Progress')}
                                 className="text-xs cursor-pointer"
                               >
-                                Mark as In-Progress
+                                Marcar en Curso
                               </DropdownMenuItem>
                               <DropdownMenuItem 
                                 onClick={() => onStatusChange(apt.id, 'Completed')}
                                 className="text-xs text-emerald-600 focus:text-emerald-700 cursor-pointer"
                               >
-                                Mark as Completed
+                                Marcar como Completada
                               </DropdownMenuItem>
                               <DropdownMenuItem 
                                 onClick={() => onStatusChange(apt.id, 'Cancelled')}
                                 className="text-xs text-rose-600 focus:text-rose-700 cursor-pointer"
                               >
-                                Cancel Appointment
+                                Cancelar Cita
+                              </DropdownMenuItem>
+                              <div className="h-px bg-neutral-100 my-1" />
+                              <div className="px-2 py-1 text-[10px] font-semibold text-neutral-400">WhatsApp</div>
+                              <DropdownMenuItem 
+                                onClick={() => handleWhatsApp(apt, 'confirm')}
+                                className="text-xs cursor-pointer text-emerald-600 hover:text-emerald-700 font-medium"
+                              >
+                                Confirmar Cita
+                              </DropdownMenuItem>
+                              <DropdownMenuItem 
+                                onClick={() => handleWhatsApp(apt, 'reminder')}
+                                className="text-xs cursor-pointer text-emerald-600 hover:text-emerald-700 font-medium"
+                              >
+                                Recordar Cita
                               </DropdownMenuItem>
                             </>
                           )}

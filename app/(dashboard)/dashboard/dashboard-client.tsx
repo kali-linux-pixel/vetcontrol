@@ -17,14 +17,31 @@ interface DashboardClientProps {
   initialAppointments: Appointment[];
   initialInventoryItems: InventoryItem[];
   revenueData: RevenueData[];
+  frequentClients: { name: string; phone: string; count: number; dni?: string }[];
+  recurrentPets: { name: string; species: string; ownerName: string; count: number }[];
+  upcomingVaccines: any[];
 }
+
+const translateStatus = (status: string) => {
+  switch (status) {
+    case 'Scheduled': return 'Programada';
+    case 'Checked-in': return 'En Espera';
+    case 'In-Progress': return 'En Curso';
+    case 'Completed': return 'Completada';
+    case 'Cancelled': return 'Cancelada';
+    default: return status;
+  }
+};
 
 export default function DashboardClient({
   clientsCount,
   petsCount,
   initialAppointments,
   initialInventoryItems,
-  revenueData
+  revenueData,
+  frequentClients,
+  recurrentPets,
+  upcomingVaccines
 }: DashboardClientProps) {
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
   const [isPending, startTransition] = useTransition();
@@ -45,7 +62,7 @@ export default function DashboardClient({
       if (res?.error) {
         showToast(res.error, 'error');
       } else {
-        showToast(`Appointment marked as ${newStatus}`);
+        showToast(`Cita marcada como ${translateStatus(newStatus)}`);
       }
     });
   };
@@ -54,50 +71,26 @@ export default function DashboardClient({
   const handleReorder = (id: string) => {
     setReorderedIds(prev => [...prev, id]);
     const item = initialInventoryItems.find(i => i.id === id);
-    showToast(`Simulated restock order sent for ${item?.name || 'product'}`);
+    showToast(`Pedido de reabastecimiento simulado enviado para ${item?.name || 'producto'}`);
   };
 
   // Simulated vaccine reminder trigger
   const handleSendReminder = (id: string) => {
     setSentReminderIds(prev => [...prev, id]);
-    showToast('Vaccination reminder sent to owner email');
+    showToast('Recordatorio de vacunación enviado exitosamente');
   };
 
   // Count active appointments and low stock items
   const activeAppointmentsCount = initialAppointments.filter(a => a.status !== 'Cancelled').length;
   const lowStockCount = initialInventoryItems.filter(item => item.stock <= item.minStock).length - reorderedIds.length;
 
-  // Mock reminders (since we don't have a table, we query from pets or default back to mock)
-  const vaccineReminders = [
-    {
-      id: 'v1',
-      petName: 'Max',
-      petSpecies: 'dog' as const,
-      vaccineName: 'DHPP (Distemper/Parvo)',
-      dueDate: '2026-06-02',
-      ownerName: 'Sarah Connor',
-      ownerEmail: 'sarah.c@sky.net',
-      status: 'Pending' as const,
-    },
-    {
-      id: 'v3',
-      petName: 'Ace',
-      petSpecies: 'dog' as const,
-      vaccineName: 'Bordetella (Kennel Cough)',
-      dueDate: '2026-05-20',
-      ownerName: 'Bruce Wayne',
-      ownerEmail: 'bruce@waynecorp.com',
-      status: 'Overdue' as const,
-    }
-  ];
-
   return (
     <div className="space-y-6 md:space-y-8 animate-fade-in relative">
       {/* Welcome header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight text-neutral-900 md:text-3xl">Dashboard</h2>
-          <p className="text-sm text-neutral-500 mt-1">Operational diagnostics and multi-tenant ledger synchronization.</p>
+          <h2 className="text-2xl font-bold tracking-tight text-neutral-900 md:text-3xl">Tablero / Panel</h2>
+          <p className="text-sm text-neutral-500 mt-1">Diagnóstico operativo y sincronización de facturación multi-inquilino.</p>
         </div>
       </div>
 
@@ -108,10 +101,10 @@ export default function DashboardClient({
         const hasAppointments = initialAppointments.length > 0;
         
         const steps = [
-          { id: 1, label: 'Create Clinic Tenant Account', isCompleted: true, href: '#' },
-          { id: 2, label: 'Register Your First Client', isCompleted: hasClients, href: '/clients' },
-          { id: 3, label: 'Create Patient Pet Profile', isCompleted: hasPets, href: '/pets' },
-          { id: 4, label: 'Schedule First Consultation', isCompleted: hasAppointments, href: '/appointments' },
+          { id: 1, label: 'Crear Cuenta de Clínica', isCompleted: true, href: '#' },
+          { id: 2, label: 'Registrar tu Primer Cliente', isCompleted: hasClients, href: '/clients' },
+          { id: 3, label: 'Crear Perfil de Mascota', isCompleted: hasPets, href: '/pets' },
+          { id: 4, label: 'Programar Primera Cita', isCompleted: hasAppointments, href: '/appointments' },
         ];
         
         const completedSteps = steps.filter(s => s.isCompleted).length;
@@ -127,17 +120,17 @@ export default function DashboardClient({
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-2.5 py-0.5 rounded-full uppercase tracking-wider">Onboarding Checklist</span>
-                  <span className="text-xs font-bold text-neutral-400">{completedSteps} of {steps.length} completed</span>
+                  <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-2.5 py-0.5 rounded-full uppercase tracking-wider">Lista de Configuración</span>
+                  <span className="text-xs font-bold text-neutral-400">{completedSteps} de {steps.length} completados</span>
                 </div>
-                <h3 className="text-lg font-bold text-neutral-900">Welcome to VetControl! Let's set up your practice.</h3>
-                <p className="text-xs text-neutral-500 max-w-xl">Follow these quick start steps to configure your clinic and manage your first patient bookings.</p>
+                <h3 className="text-lg font-bold text-neutral-900">¡Bienvenido a VetControl! Configuremos tu consultorio.</h3>
+                <p className="text-xs text-neutral-500 max-w-xl">Sigue estos rápidos pasos para configurar tu clínica y gestionar tus primeras citas de mascotas.</p>
               </div>
               
               {/* Progress Circle or Bar */}
               <div className="flex items-center gap-3 shrink-0">
                 <div className="text-right">
-                  <p className="text-xs font-bold text-neutral-400">Clinic Setup Progress</p>
+                  <p className="text-xs font-bold text-neutral-400">Progreso de Configuración</p>
                   <p className="text-xl font-black text-neutral-900">{progressPercentage}%</p>
                 </div>
                 <div className="w-16 h-2 bg-neutral-100 rounded-full overflow-hidden">
@@ -163,7 +156,7 @@ export default function DashboardClient({
                   }}
                 >
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-bold text-neutral-400">Step 0{step.id}</span>
+                    <span className="text-[10px] font-bold text-neutral-400">Paso 0{step.id}</span>
                     <span className={cn(
                       "h-4 w-4 rounded-full flex items-center justify-center border text-[9px] font-bold transition-all",
                       step.isCompleted 
@@ -176,14 +169,14 @@ export default function DashboardClient({
                   
                   <div className="mt-auto">
                     <p className={cn(
-                      "text-xs font-semibold leading-tight",
+                       "text-xs font-semibold leading-tight",
                       step.isCompleted ? "text-neutral-400 line-through" : "text-neutral-800 group-hover:text-emerald-700"
                     )}>
                       {step.label}
                     </p>
                     {!step.isCompleted && (
                       <span className="text-[9px] font-bold text-emerald-600 group-hover:underline mt-1 block">
-                        Get Started →
+                        Comenzar →
                       </span>
                     )}
                   </div>
@@ -197,29 +190,29 @@ export default function DashboardClient({
       {/* KPI Stats Cards */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard
-          title="Total Clients"
+          title="Total de Clientes"
           value={clientsCount}
           icon={<Users className="h-4.5 w-4.5" />}
-          trend={{ value: 12.5, label: "from last month", isPositive: true }}
+          trend={{ value: 12.5, label: "desde el mes pasado", isPositive: true }}
         />
         <StatCard
-          title="Active Patients"
+          title="Mascotas Activas"
           value={petsCount}
           icon={<PawPrint className="h-4.5 w-4.5" />}
-          trend={{ value: 8.2, label: "from last month", isPositive: true }}
+          trend={{ value: 8.2, label: "desde el mes pasado", isPositive: true }}
         />
         <StatCard
-          title="Appointments Today"
+          title="Citas de Hoy"
           value={activeAppointmentsCount}
           icon={<Calendar className="h-4.5 w-4.5" />}
-          trend={{ value: 15.3, label: "vs yesterday", isPositive: true }}
+          trend={{ value: 15.3, label: "vs ayer", isPositive: true }}
         />
         <StatCard
-          title="Low Stock Alerts"
+          title="Alertas de Bajo Stock"
           value={lowStockCount}
           icon={<AlertTriangle className="h-4.5 w-4.5" />}
-          trend={lowStockCount > 0 ? { value: lowStockCount, label: "items restock needed", isPositive: false } : undefined}
-          description={lowStockCount === 0 ? "All items fully stocked" : undefined}
+          trend={lowStockCount > 0 ? { value: lowStockCount, label: "artículos necesitan reabastecimiento", isPositive: false } : undefined}
+          description={lowStockCount === 0 ? "Todos los artículos están en stock óptimo" : undefined}
           className={lowStockCount > 0 ? "border-rose-100 bg-rose-50/10" : ""}
         />
       </div>
@@ -247,10 +240,62 @@ export default function DashboardClient({
 
           {/* Vaccine schedule */}
           <VaccineSchedule 
-            reminders={vaccineReminders} 
+            reminders={upcomingVaccines} 
             onSendReminder={handleSendReminder}
             sentIds={sentReminderIds}
           />
+
+          {/* Clientes y Mascotas Frecuentes */}
+          <div className="bg-white border border-neutral-100 rounded-xl p-5 shadow-xs space-y-4">
+            <div className="flex items-center gap-2 pb-2 border-b border-neutral-50">
+              <div className="flex h-7 w-7 items-center justify-center rounded-md bg-emerald-50 text-emerald-600 border border-emerald-100 font-bold text-xs">
+                ★
+              </div>
+              <div>
+                <h4 className="text-sm font-semibold text-neutral-800">Recurrencia & Fidelidad</h4>
+                <p className="text-[10px] text-neutral-400">Pacientes y dueños más recurrentes</p>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              {/* Clientes frecuentes */}
+              <div>
+                <h5 className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider mb-2">Clientes Frecuentes</h5>
+                <div className="space-y-2">
+                  {frequentClients.map((c, i) => (
+                    <div key={i} className="flex justify-between items-center text-xs">
+                      <div>
+                        <p className="font-semibold text-neutral-800">{c.name}</p>
+                        <p className="text-[9px] text-neutral-400">Cel: {c.phone} {c.dni && `• DNI: ${c.dni}`}</p>
+                      </div>
+                      <span className="bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full text-[9px] font-bold">
+                        {c.count} {c.count === 1 ? 'cita' : 'citas'}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Mascotas recurrentes */}
+              <div className="pt-2 border-t border-neutral-50">
+                <h5 className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider mb-2 font-mono">Mascotas Recurrentes</h5>
+                <div className="space-y-2">
+                  {recurrentPets.map((p, i) => (
+                    <div key={i} className="flex justify-between items-center text-xs">
+                      <div>
+                        <p className="font-semibold text-neutral-800">{p.name} {p.species === 'dog' ? '🐶' : p.species === 'cat' ? '🐱' : '🐾'}</p>
+                        <p className="text-[9px] text-neutral-400">Dueño: {p.ownerName}</p>
+                      </div>
+                      <span className="bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full text-[9px] font-bold">
+                        {p.count} {p.count === 1 ? 'visita' : 'visitas'}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
 

@@ -31,11 +31,11 @@ export function TrialBanner({ statusInfo }: TrialBannerProps) {
       <div className="bg-rose-600 text-white px-4 py-3 text-xs sm:text-sm font-semibold flex items-center justify-between shadow-md z-50">
         <div className="flex items-center gap-2">
           <AlertCircle className="h-4.5 w-4.5 text-rose-100 shrink-0" />
-          <span>Your free trial has expired. Upgrade your plan to restore full access to patient charting and scheduling.</span>
+          <span>Tu prueba gratuita ha expirado. Actualiza tu plan para restaurar el acceso completo al historial de mascotas y a la programación de citas.</span>
         </div>
         {!isBillingPage && (
           <Link href="/billing" className="bg-white text-rose-700 hover:bg-rose-50 px-3 py-1.5 rounded-lg font-bold flex items-center gap-1 shrink-0 transition-colors">
-            Upgrade Plan
+            Actualizar Plan
             <ArrowRight className="h-3.5 w-3.5" />
           </Link>
         )}
@@ -57,8 +57,8 @@ export function TrialBanner({ statusInfo }: TrialBannerProps) {
           <Sparkles className={cn("h-4 w-4 shrink-0", isCritical ? "text-amber-500" : "text-emerald-500")} />
           <span>
             {isCritical 
-              ? `Warning: Only ${statusInfo.remainingDays} days left in your free trial.` 
-              : `Trial Mode: ${statusInfo.remainingDays} days remaining in your free trial.`}
+              ? `Advertencia: Solo quedan ${statusInfo.remainingDays} días de tu prueba gratuita.` 
+              : `Modo de Prueba: Quedan ${statusInfo.remainingDays} días de tu prueba gratuita.`}
           </span>
         </div>
         <Link 
@@ -68,7 +68,7 @@ export function TrialBanner({ statusInfo }: TrialBannerProps) {
             isCritical ? "text-amber-700 hover:text-amber-900" : "text-emerald-700 hover:text-emerald-900"
           )}
         >
-          Unlock Full SaaS
+          Desbloquear SaaS Completo
           <ArrowRight className="h-3 w-3" />
         </Link>
       </div>

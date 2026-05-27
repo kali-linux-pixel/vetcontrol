@@ -27,19 +27,19 @@ export default function LoginPage() {
             <Shield className="h-5 w-5 text-emerald-400 fill-emerald-400/10" />
           </div>
           <h1 className="text-xl font-bold tracking-tight text-neutral-900">VetControl</h1>
-          <p className="text-xs text-neutral-400 mt-1">Multi-tenant Veterinary SaaS Platform</p>
+          <p className="text-xs text-neutral-400 mt-1">Plataforma SaaS Veterinaria Multi-inquilino</p>
         </div>
 
         {/* Auth Card */}
         <Card className="border border-neutral-200/60 bg-white shadow-xs rounded-xl overflow-hidden">
           <CardHeader className="pb-4">
             <CardTitle className="text-lg font-semibold text-neutral-900">
-              {mode === 'login' ? 'Sign in to VetControl' : 'Register your clinic'}
+              {mode === 'login' ? 'Iniciar sesión en VetControl' : 'Registrar tu clínica'}
             </CardTitle>
             <CardDescription className="text-xs text-neutral-500">
               {mode === 'login' 
-                ? 'Enter your credentials to access your dashboard' 
-                : 'Create a new tenant organization to get started'
+                ? 'Ingresa tus credenciales para acceder al tablero / panel' 
+                : 'Crea una nueva organización de clínica para comenzar'
               }
             </CardDescription>
           </CardHeader>
@@ -58,17 +58,17 @@ export default function LoginPage() {
               {mode === 'signup' && (
                 <>
                   <div className="space-y-1.5">
-                    <label className="text-xs font-semibold text-neutral-500">Clinic / Org Name</label>
+                    <label className="text-xs font-semibold text-neutral-500">Nombre de la Clínica / Org</label>
                     <Input 
                       name="clinicName" 
-                      placeholder="Downtown Vet Clinic" 
+                      placeholder="Clínica Veterinaria Centro" 
                       required 
                       className="h-9 text-xs" 
                       disabled={isPending}
                     />
                   </div>
                   <div className="space-y-1.5">
-                    <label className="text-xs font-semibold text-neutral-500">Full Name</label>
+                    <label className="text-xs font-semibold text-neutral-500">Nombre Completo</label>
                     <Input 
                       name="fullName" 
                       placeholder="Dr. Elizabeth Blackwell" 
@@ -82,11 +82,11 @@ export default function LoginPage() {
 
               {/* Email */}
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-neutral-500">Email Address</label>
+                <label className="text-xs font-semibold text-neutral-500">Correo Electrónico</label>
                 <Input 
                   name="email" 
                   type="email" 
-                  placeholder="name@clinic.com" 
+                  placeholder="nombre@clinica.com" 
                   required 
                   className="h-9 text-xs" 
                   disabled={isPending}
@@ -96,10 +96,10 @@ export default function LoginPage() {
               {/* Password */}
               <div className="space-y-1.5">
                 <div className="flex justify-between items-center">
-                  <label className="text-xs font-semibold text-neutral-500">Password</label>
+                  <label className="text-xs font-semibold text-neutral-500">Contraseña</label>
                   {mode === 'login' && (
                     <a href="#" className="text-[10px] text-neutral-400 hover:text-neutral-900 transition-colors">
-                      Forgot password?
+                      ¿Olvidaste tu contraseña?
                     </a>
                   )}
                 </div>
@@ -121,7 +121,7 @@ export default function LoginPage() {
                 disabled={isPending}
               >
                 {isPending && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
-                {mode === 'login' ? 'Sign In' : 'Create Organization Account'}
+                {mode === 'login' ? 'Iniciar Sesión' : 'Crear Cuenta de Organización'}
               </Button>
 
               <button
@@ -131,8 +131,8 @@ export default function LoginPage() {
                 disabled={isPending}
               >
                 {mode === 'login' 
-                  ? "Don't have an account? Register your clinic" 
-                  : 'Already registered? Sign in instead'
+                  ? "¿No tienes una cuenta? Registra tu clínica" 
+                  : '¿Ya estás registrado? Inicia sesión'
                 }
               </button>
             </CardFooter>

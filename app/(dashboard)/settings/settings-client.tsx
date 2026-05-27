@@ -26,8 +26,8 @@ export default function SettingsClient({
   const [clinicPhone, setClinicPhone] = useState('(555) 010-8900');
   
   const [vetList] = useState([
-    { name: initialFullName, specialty: 'General Practice, Feline Medicine', license: 'DVM-90184' },
-    { name: 'Dr. James Herriot', specialty: 'Equine & Small Animals, Surgery', license: 'DVM-20348' },
+    { name: initialFullName, specialty: 'Práctica General, Medicina Felina', license: 'DVM-90184' },
+    { name: 'Dr. James Herriot', specialty: 'Equinos y Animales Pequeños, Cirugía', license: 'DVM-20348' },
   ]);
 
   const [toggles, setToggles] = useState({
@@ -53,8 +53,8 @@ export default function SettingsClient({
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight text-neutral-900 md:text-3xl">Clinic Settings</h2>
-          <p className="text-sm text-neutral-500 mt-1">Configure profile details, active staff, custom timetables, and notification rules.</p>
+          <h2 className="text-2xl font-bold tracking-tight text-neutral-900 md:text-3xl">Configuración de la Clínica</h2>
+          <p className="text-sm text-neutral-500 mt-1">Configura los detalles del perfil, personal activo, horarios personalizados y reglas de notificación.</p>
         </div>
         <Button 
           onClick={handleSave}
@@ -63,12 +63,12 @@ export default function SettingsClient({
           {successMsg ? (
             <>
               <Check className="h-4 w-4 text-emerald-400" />
-              Saved Settings
+              Configuración Guardada
             </>
           ) : (
             <>
               <Save className="h-4 w-4" />
-              Save Changes
+              Guardar Cambios
             </>
           )}
         </Button>
@@ -82,14 +82,14 @@ export default function SettingsClient({
               <Building className="h-4.5 w-4.5" />
             </div>
             <div>
-              <CardTitle className="text-sm font-semibold text-neutral-900">Clinic Profile</CardTitle>
-              <CardDescription className="text-xs text-neutral-500">Public metadata and contact channels for client communications.</CardDescription>
+              <CardTitle className="text-sm font-semibold text-neutral-900">Perfil de la Clínica</CardTitle>
+              <CardDescription className="text-xs text-neutral-500">Metadatos públicos y canales de contacto para la comunicación con clientes.</CardDescription>
             </div>
           </CardHeader>
           <CardContent className="p-6 space-y-4">
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-neutral-500">Clinic Name</label>
+                <label className="text-xs font-semibold text-neutral-500">Nombre de la Clínica</label>
                 <Input 
                   value={clinicName} 
                   onChange={(e) => setClinicName(e.target.value)}
@@ -97,7 +97,7 @@ export default function SettingsClient({
                 />
               </div>
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-neutral-500">Staff Administrator</label>
+                <label className="text-xs font-semibold text-neutral-500">Administrador de Personal</label>
                 <Input 
                   value={fullName} 
                   onChange={(e) => setFullName(e.target.value)}
@@ -105,7 +105,7 @@ export default function SettingsClient({
                 />
               </div>
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-neutral-500">Contact Email</label>
+                <label className="text-xs font-semibold text-neutral-500">Correo de Contacto</label>
                 <Input 
                   type="email" 
                   value={clinicEmail} 
@@ -114,7 +114,7 @@ export default function SettingsClient({
                 />
               </div>
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-neutral-500">Phone Line</label>
+                <label className="text-xs font-semibold text-neutral-500">Línea Telefónica</label>
                 <Input 
                   value={clinicPhone} 
                   onChange={(e) => setClinicPhone(e.target.value)}
@@ -132,8 +132,8 @@ export default function SettingsClient({
               <Users className="h-4.5 w-4.5" />
             </div>
             <div>
-              <CardTitle className="text-sm font-semibold text-neutral-900">Veterinarians & Doctors</CardTitle>
-              <CardDescription className="text-xs text-neutral-500">Manage registered veterinary practitioners and licensing logs.</CardDescription>
+              <CardTitle className="text-sm font-semibold text-neutral-900">Veterinarios y Doctores</CardTitle>
+              <CardDescription className="text-xs text-neutral-500">Gestiona los veterinarios registrados y sus licencias.</CardDescription>
             </div>
           </CardHeader>
           <CardContent className="p-6">
@@ -160,8 +160,8 @@ export default function SettingsClient({
               <BellRing className="h-4.5 w-4.5" />
             </div>
             <div>
-              <CardTitle className="text-sm font-semibold text-neutral-900">Automation & Notification Rules</CardTitle>
-              <CardDescription className="text-xs text-neutral-500">Configure trigger conditions for client messaging and clinic warnings.</CardDescription>
+              <CardTitle className="text-sm font-semibold text-neutral-900">Reglas de Automatización y Notificación</CardTitle>
+              <CardDescription className="text-xs text-neutral-500">Configura las condiciones de activación para mensajes a clientes y advertencias de la clínica.</CardDescription>
             </div>
           </CardHeader>
           <CardContent className="p-6 space-y-4">
@@ -169,8 +169,8 @@ export default function SettingsClient({
               {/* Toggle 1 */}
               <div className="flex items-center justify-between pb-3 border-b border-neutral-50">
                 <div>
-                  <h4 className="text-xs font-semibold text-neutral-800">Vaccine Reminders Email</h4>
-                  <p className="text-[10px] text-neutral-400 mt-0.5">Send automated reminder messages to owners 7 days prior to vaccine expiration.</p>
+                  <h4 className="text-xs font-semibold text-neutral-800">Correo de Recordatorios de Vacunas</h4>
+                  <p className="text-[10px] text-neutral-400 mt-0.5">Envía mensajes automáticos de recordatorio a los propietarios 7 días antes del vencimiento de la vacuna.</p>
                 </div>
                 <button 
                   onClick={() => handleToggle('emailVaccines')}
@@ -189,8 +189,8 @@ export default function SettingsClient({
               {/* Toggle 2 */}
               <div className="flex items-center justify-between pb-3 border-b border-neutral-50">
                 <div>
-                  <h4 className="text-xs font-semibold text-neutral-800">Appointment Confirmations SMS</h4>
-                  <p className="text-[10px] text-neutral-400 mt-0.5">Send booking validation codes to patient owners mobile phone numbers.</p>
+                  <h4 className="text-xs font-semibold text-neutral-800">SMS de Confirmación de Citas</h4>
+                  <p className="text-[10px] text-neutral-400 mt-0.5">Envía códigos de validación de citas a los números de teléfono móvil de los propietarios.</p>
                 </div>
                 <button 
                   onClick={() => handleToggle('smsAppointments')}
@@ -209,8 +209,8 @@ export default function SettingsClient({
               {/* Toggle 3 */}
               <div className="flex items-center justify-between pb-3 border-b border-neutral-50">
                 <div>
-                  <h4 className="text-xs font-semibold text-neutral-800">Low Stock Product Alerts</h4>
-                  <p className="text-[10px] text-neutral-400 mt-0.5">Trigger dashboard notifications when tracked inventory stock falls below target capacity.</p>
+                  <h4 className="text-xs font-semibold text-neutral-800">Alertas de Productos con Bajo Stock</h4>
+                  <p className="text-[10px] text-neutral-400 mt-0.5">Activa notificaciones en el tablero cuando el stock del inventario caiga por debajo de la capacidad límite.</p>
                 </div>
                 <button 
                   onClick={() => handleToggle('alertInventory')}

@@ -3,13 +3,14 @@
 import { createServerClient } from '@/src/lib/supabase';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
+import { ensureUserProfile } from '@/lib/auth-utils';
 
 export async function login(state: any, formData: FormData) {
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
 
   if (!email || !password) {
-    return { error: 'Email and password are required.' };
+    return { error: 'El correo electrónico y la contraseña son obligatorios.' };
   }
 
   const supabase = await createServerClient();
@@ -17,6 +18,17 @@ export async function login(state: any, formData: FormData) {
 
   if (error) {
     return { error: error.message };
+  }
+
+  // Database verification check on login
+  const { data: { user }, error: userError } = await supabase.auth.getUser();
+  if (user && !userError) {
+    try {
+      await ensureUserProfile(user);
+    } catch (profileErr: any) {
+      console.error("Login verification check failed:", profileErr);
+      return { error: `La verificación de la base de datos falló: ${profileErr.message}` };
+    }
   }
 
   revalidatePath('/', 'layout');
@@ -30,15 +42,13 @@ export async function signup(state: any, formData: FormData) {
   const fullName = formData.get('fullName') as string;
 
   if (!email || !password || !clinicName || !fullName) {
-    return { error: 'All fields are required.' };
+    return { error: 'Todos los campos son obligatorios.' };
   }
 
   const supabase = await createServerClient();
 
   // Register Auth User
   // Passing clinic_name and full_name in the options metadata.
-  // The PostgreSQL trigger public.handle_new_user() runs AFTER INSERT ON auth.users
-  // and will atomically create the organization, user profile, and seed onboarding tables.
   const { data: authData, error: authError } = await supabase.auth.signUp({
     email,
     password,
@@ -52,6 +62,16 @@ export async function signup(state: any, formData: FormData) {
 
   if (authError) {
     return { error: authError.message };
+  }
+
+  // Create Profile and Organization rows programmatically immediately
+  if (authData.user) {
+    try {
+      await ensureUserProfile(authData.user);
+    } catch (profileErr: any) {
+      console.error("Signup profile configuration failed:", profileErr);
+      return { error: `La configuración del perfil falló: ${profileErr.message}` };
+    }
   }
 
   revalidatePath('/', 'layout');

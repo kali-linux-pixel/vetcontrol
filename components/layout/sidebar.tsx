@@ -17,6 +17,7 @@ import {
   ChevronsUpDown,
   LogOut,
   CreditCard,
+  MessageSquare,
 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -41,14 +42,15 @@ export function Sidebar({
   const pathname = usePathname();
 
   const menuItems = [
-    { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
-    { name: 'Clients', href: '/clients', icon: Users },
-    { name: 'Pets', href: '/pets', icon: PawPrint },
-    { name: 'Appointments', href: '/appointments', icon: Calendar },
-    { name: 'Inventory', href: '/inventory', icon: Package },
-    { name: 'Sales', href: '/sales', icon: DollarSign },
-    { name: 'Billing', href: '/billing', icon: CreditCard },
-    { name: 'Settings', href: '/settings', icon: Settings },
+    { name: 'Tablero / Panel', href: '/dashboard', icon: LayoutDashboard },
+    { name: 'Clientes', href: '/clients', icon: Users },
+    { name: 'Mascotas', href: '/pets', icon: PawPrint },
+    { name: 'Citas', href: '/appointments', icon: Calendar },
+    { name: 'Inventario', href: '/inventory', icon: Package },
+    { name: 'Ventas / Facturación', href: '/sales', icon: DollarSign },
+    { name: 'WhatsApp', href: '/whatsapp', icon: MessageSquare },
+    { name: 'Planes y Facturación', href: '/billing', icon: CreditCard },
+    { name: 'Configuración', href: '/settings', icon: Settings },
   ];
 
   const isActive = (href: string) => {
@@ -83,7 +85,7 @@ export function Sidebar({
         </div>
         <div>
           <h1 className="text-base font-bold tracking-tight text-neutral-950">VetControl</h1>
-          <p className="text-[10px] font-medium text-emerald-600 tracking-wider uppercase leading-none mt-0.5">SaaS Platform</p>
+          <p className="text-[10px] font-medium text-emerald-600 tracking-wider uppercase leading-none mt-0.5">Plataforma SaaS</p>
         </div>
       </div>
 
@@ -148,7 +150,7 @@ export function Sidebar({
               className="text-xs cursor-pointer flex items-center gap-2 text-rose-600 focus:text-rose-700"
             >
               <LogOut className="h-3.5 w-3.5" />
-              Sign Out
+              Cerrar Sesión
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

@@ -23,13 +23,10 @@ export default async function Page() {
   }));
 
   try {
-    const { data: profile, error: profileErr } = await supabase
-      .from('profiles')
-      .select('organization_id')
-      .eq('id', user.id)
-      .single();
+    const { getProfileOrEnsure } = await import('@/lib/auth-utils');
+    const { profile } = await getProfileOrEnsure();
 
-    if (profile && !profileErr) {
+    if (profile) {
       const orgId = profile.organization_id;
 
       // 1. Query all appointments for the organization
@@ -48,7 +45,9 @@ export default async function Page() {
             name,
             species,
             clients (
-              name
+              name,
+              phone,
+              dni
             )
           )
         `)
@@ -75,6 +74,8 @@ export default async function Page() {
           petName: apt.pets?.name || 'Unknown Patient',
           petSpecies: (apt.pets?.species as any) || 'other',
           ownerName: apt.pets?.clients?.name || 'Unknown Owner',
+          ownerPhone: apt.pets?.clients?.phone || '',
+          ownerDni: apt.pets?.clients?.dni || '',
           date: apt.date,
           time: apt.time,
           type: apt.type as any,

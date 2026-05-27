@@ -15,6 +15,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Sidebar } from './sidebar';
+import { GlobalSearch } from './global-search';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -37,25 +38,25 @@ export function Navbar({ onSearchChange, profileName = 'Dr. E. Blackwell' }: Nav
   const [notifications, setNotifications] = useState([
     {
       id: 1,
-      title: 'Stock Alert',
-      message: 'Amoxicillin Tablets are running below critical levels.',
-      time: '10 mins ago',
+      title: 'Alerta de Stock',
+      message: 'Las tabletas de amoxicilina están por debajo de los niveles críticos.',
+      time: 'Hace 10 mins',
       read: false,
       type: 'warning'
     },
     {
       id: 2,
-      title: 'New Patient Registration',
-      message: 'Bella (Golden Retriever) owner Sarah Connor registered.',
-      time: '2 hours ago',
+      title: 'Registro de Nueva Mascota',
+      message: 'Bella (Golden Retriever) de la propietaria Sarah Connor registrada.',
+      time: 'Hace 2 horas',
       read: false,
       type: 'info'
     },
     {
       id: 3,
-      title: 'Vaccine Overdue',
-      message: 'Rabies Booster for Ace (Great Dane) is overdue.',
-      time: '1 day ago',
+      title: 'Vacuna Vencida',
+      message: 'El refuerzo de rabia para Ace (Gran Danés) está vencido.',
+      time: 'Hace 1 día',
       read: true,
       type: 'error'
     }
@@ -68,9 +69,28 @@ export function Navbar({ onSearchChange, profileName = 'Dr. E. Blackwell' }: Nav
   };
 
   const getPageTitle = (path: string) => {
-    if (path === '/') return 'Dashboard';
-    const segment = path.split('/')[1];
-    return segment.charAt(0).toUpperCase() + segment.slice(1);
+    const segment = path.split('/')[1] || '';
+    switch (segment.toLowerCase()) {
+      case '':
+      case 'dashboard':
+        return 'Tablero / Panel';
+      case 'clients':
+        return 'Clientes';
+      case 'pets':
+        return 'Mascotas';
+      case 'appointments':
+        return 'Citas';
+      case 'inventory':
+        return 'Inventario';
+      case 'sales':
+        return 'Ventas / Facturación';
+      case 'billing':
+        return 'Planes y Facturación';
+      case 'settings':
+        return 'Configuración';
+      default:
+        return segment.charAt(0).toUpperCase() + segment.slice(1);
+    }
   };
 
   const getNotificationIcon = (type: string) => {
@@ -96,7 +116,7 @@ export function Navbar({ onSearchChange, profileName = 'Dr. E. Blackwell' }: Nav
             className="md:hidden h-9 w-9 text-neutral-500 hover:text-neutral-900 rounded-lg"
           >
             <Menu className="h-5 w-5" />
-            <span className="sr-only">Toggle menu</span>
+            <span className="sr-only">Alternar menú</span>
           </Button>
 
           {/* Breadcrumbs */}
@@ -110,17 +130,8 @@ export function Navbar({ onSearchChange, profileName = 'Dr. E. Blackwell' }: Nav
         {/* Right Side: Search, Notifications & Profile */}
         <div className="flex items-center gap-4">
           {/* Search bar */}
-          <div className="relative hidden sm:block w-64 md:w-72">
-            <Search className="absolute left-3 top-2.5 h-4 w-4 text-neutral-400" />
-            <Input
-              type="search"
-              placeholder="Search patients, clients..."
-              className="pl-9 pr-12 h-9 w-full bg-neutral-50/50 hover:bg-neutral-50 border-neutral-200/60 focus:bg-white text-xs rounded-lg transition-colors duration-150"
-              onChange={(e) => onSearchChange?.(e.target.value)}
-            />
-            <kbd className="pointer-events-none absolute right-3 top-2.5 hidden h-4 select-none items-center gap-0.5 rounded border border-neutral-200 bg-white px-1.5 font-mono text-[9px] font-medium text-neutral-400 opacity-100 sm:flex">
-              <span>⌘</span>K
-            </kbd>
+          <div className="hidden sm:block">
+            <GlobalSearch />
           </div>
 
           {/* Notifications Dropdown */}
@@ -135,21 +146,21 @@ export function Navbar({ onSearchChange, profileName = 'Dr. E. Blackwell' }: Nav
                   {unreadCount > 0 && (
                     <span className="absolute right-2 top-2 flex h-2 w-2 rounded-full bg-emerald-500 ring-2 ring-white animate-pulse" />
                   )}
-                  <span className="sr-only">Notifications</span>
+                  <span className="sr-only">Notificaciones</span>
                 </button>
               }
             />
             <DropdownMenuContent align="end" className="w-[320px] p-2 border border-neutral-100 shadow-xl">
               <div className="flex items-center justify-between px-3 py-1.5">
                 <DropdownMenuGroup>
-                  <DropdownMenuLabel className="text-xs font-bold text-neutral-800 p-0">Notifications</DropdownMenuLabel>
+                  <DropdownMenuLabel className="text-xs font-bold text-neutral-800 p-0">Notificaciones</DropdownMenuLabel>
                 </DropdownMenuGroup>
                 {unreadCount > 0 && (
                   <button 
                     onClick={markAllAsRead} 
                     className="text-[10px] font-semibold text-emerald-600 hover:text-emerald-700 hover:underline"
                   >
-                    Mark all read
+                    Marcar todas como leídas
                   </button>
                 )}
               </div>
@@ -157,7 +168,7 @@ export function Navbar({ onSearchChange, profileName = 'Dr. E. Blackwell' }: Nav
               <div className="max-h-[250px] overflow-y-auto space-y-1">
                 {notifications.length === 0 ? (
                   <div className="py-6 text-center text-xs text-neutral-400 font-medium">
-                    No new notifications
+                    Sin notificaciones nuevas
                   </div>
                 ) : (
                   notifications.map((notif) => (
@@ -212,7 +223,7 @@ export function Navbar({ onSearchChange, profileName = 'Dr. E. Blackwell' }: Nav
                 className="h-8 w-8 text-neutral-500 hover:text-neutral-900 rounded-lg"
               >
                 <X className="h-4.5 w-4.5" />
-                <span className="sr-only">Close sidebar</span>
+                <span className="sr-only">Cerrar barra lateral</span>
               </Button>
             </div>
             <Sidebar 

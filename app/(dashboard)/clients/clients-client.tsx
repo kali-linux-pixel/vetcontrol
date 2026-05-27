@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState, useTransition, useActionState } from 'react';
+import React, { useState, useEffect, useTransition, useActionState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { Client } from '@/types';
 import { createClient, updateClient, deleteClient } from '@/app/actions/clients';
 import { 
@@ -22,8 +23,18 @@ interface ClientsClientProps {
 }
 
 export default function ClientsClient({ initialClients }: ClientsClientProps) {
-  const [searchQuery, setSearchQuery] = useState('');
+  const searchParams = useSearchParams();
+  const urlSearch = searchParams?.get('search');
+
+  const [searchQuery, setSearchQuery] = useState(urlSearch || '');
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+
+  // Sync state with URL search param if provided
+  useEffect(() => {
+    if (urlSearch) {
+      setSearchQuery(urlSearch);
+    }
+  }, [urlSearch]);
 
   // Dialog states
   const [isAddOpen, setIsAddOpen] = useState(false);
@@ -45,18 +56,18 @@ export default function ClientsClient({ initialClients }: ClientsClientProps) {
       return { error: res.error };
     }
     setIsAddOpen(false);
-    showToast('Client added successfully.');
+    showToast('Cliente agregado exitosamente.');
     return { success: true };
   };
 
   const handleEditSubmit = async (prevState: any, formData: FormData) => {
-    if (!selectedClient) return { error: 'No client selected.' };
+    if (!selectedClient) return { error: 'Ningún cliente seleccionado.' };
     const res = await updateClient(selectedClient.id, prevState, formData);
     if (res?.error) {
       return { error: res.error };
     }
     setIsEditOpen(false);
-    showToast('Client information updated.');
+    showToast('Información del cliente actualizada.');
     return { success: true };
   };
 
@@ -68,7 +79,7 @@ export default function ClientsClient({ initialClients }: ClientsClientProps) {
         showToast(res.error, 'error');
       } else {
         setIsDeleteOpen(false);
-        showToast('Client deleted successfully.');
+        showToast('Cliente eliminado exitosamente.');
       }
     });
   };
@@ -78,8 +89,9 @@ export default function ClientsClient({ initialClients }: ClientsClientProps) {
 
   const filteredClients = initialClients.filter(client => 
     client.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    client.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    client.phone.includes(searchQuery)
+    (client.email && client.email.toLowerCase().includes(searchQuery.toLowerCase())) ||
+    client.phone.includes(searchQuery) ||
+    (client.dni && client.dni.includes(searchQuery))
   );
 
   return (
@@ -87,15 +99,15 @@ export default function ClientsClient({ initialClients }: ClientsClientProps) {
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight text-neutral-900 md:text-3xl">Clients Directory</h2>
-          <p className="text-sm text-neutral-500 mt-1">Manage veterinary clients, contact information, and registration history.</p>
+          <h2 className="text-2xl font-bold tracking-tight text-neutral-900 md:text-3xl">Directorio de Clientes</h2>
+          <p className="text-sm text-neutral-500 mt-1">Gestiona los clientes de la veterinaria, su información de contacto e historial de registro.</p>
         </div>
         <Button 
           onClick={() => setIsAddOpen(true)}
           className="bg-neutral-900 hover:bg-neutral-800 text-white gap-2 h-10 px-4 self-start sm:self-auto rounded-lg"
         >
           <UserPlus className="h-4 w-4" />
-          Add Client
+          Agregar Cliente
         </Button>
       </div>
 
@@ -106,14 +118,14 @@ export default function ClientsClient({ initialClients }: ClientsClientProps) {
             <div className="relative w-full sm:max-w-xs">
               <Search className="absolute left-3 top-2.5 h-4 w-4 text-neutral-400" />
               <Input
-                placeholder="Search by name, email, or phone..."
+                placeholder="Buscar por nombre, correo o teléfono..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-9 h-9 text-xs"
               />
             </div>
             <div className="text-xs text-neutral-400 font-medium">
-              Showing {filteredClients.length} of {initialClients.length} clients
+              Mostrando {filteredClients.length} de {initialClients.length} clientes
             </div>
           </div>
         </CardHeader>
@@ -122,19 +134,20 @@ export default function ClientsClient({ initialClients }: ClientsClientProps) {
             <Table>
               <TableHeader className="bg-neutral-50/50">
                 <TableRow className="hover:bg-transparent border-neutral-100">
-                  <TableHead className="w-[200px] text-xs font-semibold text-neutral-500 h-10 px-6">Client Name</TableHead>
-                  <TableHead className="text-xs font-semibold text-neutral-500 h-10">Email Address</TableHead>
-                  <TableHead className="text-xs font-semibold text-neutral-500 h-10">Phone Number</TableHead>
-                  <TableHead className="text-xs font-semibold text-neutral-500 h-10">Registered Pets</TableHead>
-                  <TableHead className="text-xs font-semibold text-neutral-500 h-10">Join Date</TableHead>
-                  <TableHead className="w-[120px] text-xs font-semibold text-neutral-500 h-10 pr-6 text-right">Actions</TableHead>
+                  <TableHead className="w-[200px] text-xs font-semibold text-neutral-500 h-10 px-6">Nombre del Cliente</TableHead>
+                  <TableHead className="text-xs font-semibold text-neutral-500 h-10">DNI</TableHead>
+                  <TableHead className="text-xs font-semibold text-neutral-500 h-10">Correo Electrónico</TableHead>
+                  <TableHead className="text-xs font-semibold text-neutral-500 h-10">Número de Teléfono</TableHead>
+                  <TableHead className="text-xs font-semibold text-neutral-500 h-10">Mascotas Registradas</TableHead>
+                  <TableHead className="text-xs font-semibold text-neutral-500 h-10">Fecha de Registro</TableHead>
+                  <TableHead className="w-[120px] text-xs font-semibold text-neutral-500 h-10 pr-6 text-right">Acciones</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {filteredClients.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={6} className="h-32 text-center text-sm text-neutral-400">
-                      No clients found.
+                    <TableCell colSpan={7} className="h-32 text-center text-sm text-neutral-400">
+                      No se encontraron clientes.
                     </TableCell>
                   </TableRow>
                 ) : (
@@ -151,10 +164,13 @@ export default function ClientsClient({ initialClients }: ClientsClientProps) {
                           </div>
                         </div>
                       </TableCell>
+                      <TableCell className="py-4 font-mono text-xs text-neutral-700">
+                        {client.dni || <span className="text-neutral-400 italic">No registrado</span>}
+                      </TableCell>
                       <TableCell className="py-4">
                         <div className="flex items-center gap-2 text-neutral-600">
                           <Mail className="h-3.5 w-3.5 text-neutral-400" />
-                          <span className="text-sm">{client.email}</span>
+                          <span className="text-sm">{client.email || <span className="text-neutral-400 italic">No registrado</span>}</span>
                         </div>
                       </TableCell>
                       <TableCell className="py-4">
@@ -172,7 +188,7 @@ export default function ClientsClient({ initialClients }: ClientsClientProps) {
                         <div className="flex items-center gap-2 text-neutral-600">
                           <Calendar className="h-3.5 w-3.5 text-neutral-400" />
                           <span className="text-sm">
-                            {new Date(client.joinedDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                            {new Date(client.joinedDate).toLocaleDateString('es-ES', { month: 'short', day: 'numeric', year: 'numeric' })}
                           </span>
                         </div>
                       </TableCell>
@@ -215,30 +231,40 @@ export default function ClientsClient({ initialClients }: ClientsClientProps) {
       <Dialog open={isAddOpen} onOpenChange={setIsAddOpen}>
         <DialogContent className="sm:max-w-md bg-white border border-neutral-100 shadow-2xl p-6 rounded-xl animate-in fade-in zoom-in-95">
           <DialogHeader>
-            <DialogTitle className="text-base font-bold text-neutral-900">Add New Client</DialogTitle>
-            <DialogDescription className="text-xs text-neutral-500">Register contact details for a new owner profile.</DialogDescription>
+            <DialogTitle className="text-base font-bold text-neutral-900">Agregar Nuevo Cliente</DialogTitle>
+            <DialogDescription className="text-xs text-neutral-500">Registra los datos de contacto para un nuevo perfil de propietario.</DialogDescription>
           </DialogHeader>
           <form action={addAction} className="space-y-4">
             {addState?.error && (
               <p className="text-xs text-rose-600 font-semibold bg-rose-50 border border-rose-100 p-2.5 rounded-lg">{addState.error}</p>
             )}
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-neutral-500">Client Full Name</label>
-              <Input name="name" placeholder="John Doe" required className="h-9 text-xs" disabled={addPending} />
+              <label className="text-xs font-semibold text-neutral-500">Nombre Completo del Cliente *</label>
+              <Input name="name" placeholder="Juan Pérez" required className="h-9 text-xs" disabled={addPending} />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold text-neutral-500">DNI (Perú) *</label>
+                <Input name="dni" placeholder="12345678" required className="h-9 text-xs" disabled={addPending} />
+              </div>
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold text-neutral-500">Número de Celular *</label>
+                <Input name="phone" placeholder="987654321" required className="h-9 text-xs" disabled={addPending} />
+              </div>
             </div>
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-neutral-500">Email Address</label>
-              <Input name="email" type="email" placeholder="john.doe@gmail.com" required className="h-9 text-xs" disabled={addPending} />
+              <label className="text-xs font-semibold text-neutral-500">Dirección Domiciliaria</label>
+              <Input name="address" placeholder="Av. Larco 123, Miraflores" className="h-9 text-xs" disabled={addPending} />
             </div>
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-neutral-500">Phone Number</label>
-              <Input name="phone" placeholder="(555) 019-2834" required className="h-9 text-xs" disabled={addPending} />
+              <label className="text-xs font-semibold text-neutral-500">Correo Electrónico</label>
+              <Input name="email" type="email" placeholder="juan.perez@gmail.com" className="h-9 text-xs" disabled={addPending} />
             </div>
             <DialogFooter className="pt-2 flex flex-col sm:flex-row gap-2">
-              <Button type="button" variant="outline" onClick={() => setIsAddOpen(false)} className="h-9 text-xs rounded-lg" disabled={addPending}>Cancel</Button>
+              <Button type="button" variant="outline" onClick={() => setIsAddOpen(false)} className="h-9 text-xs rounded-lg" disabled={addPending}>Cancelar</Button>
               <Button type="submit" className="h-9 text-xs bg-neutral-900 hover:bg-neutral-800 text-white rounded-lg gap-1.5" disabled={addPending}>
                 {addPending && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
-                Register Client
+                Registrar Cliente
               </Button>
             </DialogFooter>
           </form>
@@ -249,30 +275,40 @@ export default function ClientsClient({ initialClients }: ClientsClientProps) {
       <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
         <DialogContent className="sm:max-w-md bg-white border border-neutral-100 shadow-2xl p-6 rounded-xl animate-in fade-in zoom-in-95">
           <DialogHeader>
-            <DialogTitle className="text-base font-bold text-neutral-900">Edit Client</DialogTitle>
-            <DialogDescription className="text-xs text-neutral-500">Modify registered client information.</DialogDescription>
+            <DialogTitle className="text-base font-bold text-neutral-900">Editar Cliente</DialogTitle>
+            <DialogDescription className="text-xs text-neutral-500">Modifica la información del cliente registrado.</DialogDescription>
           </DialogHeader>
           <form action={editAction} className="space-y-4">
             {editState?.error && (
               <p className="text-xs text-rose-600 font-semibold bg-rose-50 border border-rose-100 p-2.5 rounded-lg">{editState.error}</p>
             )}
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-neutral-500">Client Full Name</label>
+              <label className="text-xs font-semibold text-neutral-500">Nombre Completo del Cliente *</label>
               <Input name="name" defaultValue={selectedClient?.name} required className="h-9 text-xs" disabled={editPending} />
             </div>
-            <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-neutral-500">Email Address</label>
-              <Input name="email" type="email" defaultValue={selectedClient?.email} required className="h-9 text-xs" disabled={editPending} />
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold text-neutral-500">DNI (Perú) *</label>
+                <Input name="dni" defaultValue={selectedClient?.dni} placeholder="12345678" required className="h-9 text-xs" disabled={editPending} />
+              </div>
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold text-neutral-500">Número de Celular *</label>
+                <Input name="phone" defaultValue={selectedClient?.phone} required className="h-9 text-xs" disabled={editPending} />
+              </div>
             </div>
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-neutral-500">Phone Number</label>
-              <Input name="phone" defaultValue={selectedClient?.phone} required className="h-9 text-xs" disabled={editPending} />
+              <label className="text-xs font-semibold text-neutral-500">Dirección Domiciliaria</label>
+              <Input name="address" defaultValue={selectedClient?.address} placeholder="Av. Larco 123, Miraflores" className="h-9 text-xs" disabled={editPending} />
+            </div>
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold text-neutral-500">Correo Electrónico</label>
+              <Input name="email" type="email" defaultValue={selectedClient?.email} className="h-9 text-xs" disabled={editPending} />
             </div>
             <DialogFooter className="pt-2 flex flex-col sm:flex-row gap-2">
-              <Button type="button" variant="outline" onClick={() => setIsEditOpen(false)} className="h-9 text-xs rounded-lg" disabled={editPending}>Cancel</Button>
+              <Button type="button" variant="outline" onClick={() => setIsEditOpen(false)} className="h-9 text-xs rounded-lg" disabled={editPending}>Cancelar</Button>
               <Button type="submit" className="h-9 text-xs bg-neutral-900 hover:bg-neutral-800 text-white rounded-lg gap-1.5" disabled={editPending}>
                 {editPending && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
-                Save Changes
+                Guardar Cambios
               </Button>
             </DialogFooter>
           </form>
@@ -283,13 +319,13 @@ export default function ClientsClient({ initialClients }: ClientsClientProps) {
       <Dialog open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
         <DialogContent className="sm:max-w-md bg-white border border-neutral-100 shadow-2xl p-6 rounded-xl animate-in fade-in zoom-in-95">
           <DialogHeader>
-            <DialogTitle className="text-base font-bold text-rose-600">Delete Client Profile</DialogTitle>
+            <DialogTitle className="text-base font-bold text-rose-600">Eliminar Perfil de Cliente</DialogTitle>
             <DialogDescription className="text-xs text-neutral-500">
-              Are you sure you want to delete client <strong className="text-neutral-800">{selectedClient?.name}</strong>? This action will cascade delete all linked pets and appointments and cannot be undone.
+              ¿Estás seguro de que deseas eliminar al cliente <strong className="text-neutral-800">{selectedClient?.name}</strong>? Esta acción eliminará en cascada todas las mascotas y citas asociadas y no se puede deshacer.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="pt-2 flex flex-col sm:flex-row gap-2">
-            <Button type="button" variant="outline" onClick={() => setIsDeleteOpen(false)} className="h-9 text-xs rounded-lg" disabled={isMutating}>Cancel</Button>
+            <Button type="button" variant="outline" onClick={() => setIsDeleteOpen(false)} className="h-9 text-xs rounded-lg" disabled={isMutating}>Cancelar</Button>
             <Button 
               type="button" 
               onClick={handleDeleteSubmit}
@@ -297,7 +333,7 @@ export default function ClientsClient({ initialClients }: ClientsClientProps) {
               disabled={isMutating}
             >
               {isMutating && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
-              Confirm Delete
+              Confirmar Eliminación
             </Button>
           </DialogFooter>
         </DialogContent>

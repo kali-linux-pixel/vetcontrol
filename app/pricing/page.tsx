@@ -5,71 +5,71 @@ import { Check, Shield, MessageSquare, ArrowRight, X, Heart } from 'lucide-react
 import { Button } from '@/components/ui/button';
 
 export const metadata: Metadata = {
-  title: 'Pricing Plans - VetControl Practice Management',
-  description: 'Choose the perfect practice management plan for your veterinary clinic. Transparent pricing with no setup fees or contracts.',
+  title: 'Planes de Precios - VetControl Gestión Veterinaria',
+  description: 'Elige el plan de gestión perfecto para tu clínica veterinaria. Precios transparentes sin tarifas de configuración ni contratos.',
 };
 
 export default function PricingPage() {
   const plans = [
     {
-      name: 'Starter Plan',
+      name: 'Plan Inicial',
       price: '$9',
-      billing: 'per month',
-      desc: 'Essential toolset for mobile vets and independent practices.',
+      billing: 'por mes',
+      desc: 'Conjunto de herramientas esencial para veterinarios a domicilio y consultorios independientes.',
       features: [
-        '1 Practitioner Account',
-        'Up to 500 Patient Files',
-        'Appointment Scheduler Calendar',
-        'Basic Patient Records',
-        'Email Reminders Support',
-        'Self-Serve Help Desk'
+        '1 Cuenta de Veterinario',
+        'Hasta 500 Expedientes de Mascotas',
+        'Calendario de Citas',
+        'Historial Clínico Básico',
+        'Recordatorios por Correo Electrónico',
+        'Centro de Ayuda de Autoservicio'
       ],
-      cta: 'Start Free Trial',
+      cta: 'Iniciar Prueba Gratuita',
       href: '/signup',
       highlighted: false
     },
     {
-      name: 'Professional Plan',
+      name: 'Plan Profesional',
       price: '$19',
-      billing: 'per month',
-      desc: 'Full-featured practice management for growing animal hospitals.',
+      billing: 'por mes',
+      desc: 'Gestión integral con todas las funciones para hospitales veterinarios en crecimiento.',
       features: [
-        '5 Veterinarian Accounts',
-        'Unlimited Active Patients',
-        'Smart Medicine Inventory Alerts',
-        'Automated WhatsApp reminders',
-        'SMS/Email Booking validations',
-        'Comprehensive Practice Analytics',
-        'Priority SLA Support'
+        '5 Cuentas de Veterinarios',
+        'Mascotas Activas Ilimitadas',
+        'Alertas Inteligentes de Inventario de Medicamentos',
+        'Recordatorios automáticos por WhatsApp',
+        'Validaciones de citas por SMS/Correo',
+        'Métricas Completas del Consultorio',
+        'Soporte Prioritario con SLA'
       ],
-      cta: 'Start Free Trial',
+      cta: 'Iniciar Prueba Gratuita',
       href: '/signup',
       highlighted: true
     }
   ];
 
   const comparison = [
-    { feature: 'Practitioner Accounts', starter: '1 License', professional: '5 Licenses' },
-    { feature: 'Active Patient Profiles', starter: 'Up to 500', professional: 'Unlimited' },
-    { feature: 'Scheduler Calendar', starter: '✓ (Basic)', professional: '✓ (Advanced Multi-Vet)' },
-    { feature: 'Clinical Records & Notes', starter: '✓', professional: '✓' },
-    { feature: 'Smart Inventory & SKUs', starter: '✗', professional: '✓' },
-    { feature: 'WhatsApp Reminders', starter: '✗', professional: '✓' },
-    { feature: 'SLA Support Priority', starter: 'Standard Email', professional: '24/7 Priority Support' },
+    { feature: 'Cuentas de Veterinarios', starter: '1 Licencia', professional: '5 Licencias' },
+    { feature: 'Perfiles de Mascotas Activos', starter: 'Hasta 500', professional: 'Ilimitado' },
+    { feature: 'Calendario de Citas', starter: '✓ (Básico)', professional: '✓ (Avanzado Multi-Veterinario)' },
+    { feature: 'Historial Clínico y Notas', starter: '✓', professional: '✓' },
+    { feature: 'Inventario Inteligente y SKUs', starter: '✗', professional: '✓' },
+    { feature: 'Recordatorios por WhatsApp', starter: '✗', professional: '✓' },
+    { feature: 'Prioridad de Soporte SLA', starter: 'Correo Estándar', professional: 'Soporte Prioritario 24/7' },
   ];
 
   const FAQs = [
     {
-      q: 'Is there a setup fee or lock-in contract?',
-      a: 'Absolutely not. You pay month-to-month, and you can cancel or change your practice subscription tier at any time without extra fees.'
+      q: '¿Hay alguna tarifa de configuración o contrato de permanencia?',
+      a: 'Absolutamente no. Pagas mes a mes, y puedes cancelar o cambiar el nivel de suscripción de tu veterinaria en cualquier momento sin cargos adicionales.'
     },
     {
-      q: 'How do automated WhatsApp reminders work?',
-      a: 'Professional plan accounts can configure automated vaccination and appointment follow-up reminders. The system automatically drafts and schedules them via API to trigger owner messaging notifications.'
+      q: '¿Cómo funcionan los recordatorios automáticos por WhatsApp?',
+      a: 'Las cuentas del plan Profesional pueden configurar recordatorios automáticos de vacunación y seguimiento de citas. El sistema los redacta y programa automáticamente vía API para enviar notificaciones a los propietarios.'
     },
     {
-      q: 'Can I add more veterinarians to the Professional plan?',
-      a: 'Yes! The Professional plan includes 5 veterinarian seats by default. If your animal hospital requires additional staff licenses, contact support for custom additions.'
+      q: '¿Puedo agregar más veterinarios al plan Profesional?',
+      a: '¡Sí! El plan Profesional incluye 5 cuentas de veterinarios por defecto. Si tu hospital veterinario requiere licencias de personal adicionales, contacta a soporte para opciones personalizadas.'
     }
   ];
 
@@ -84,26 +84,26 @@ export default function PricingPage() {
             </div>
             <div className="flex flex-col">
               <span className="text-base font-bold tracking-tight text-neutral-900 leading-none">VetControl</span>
-              <span className="text-[9px] font-semibold text-emerald-600 tracking-wider uppercase leading-none mt-1">SaaS Platform</span>
+              <span className="text-[9px] font-semibold text-emerald-600 tracking-wider uppercase leading-none mt-1">Plataforma SaaS</span>
             </div>
           </Link>
 
           <nav className="hidden md:flex items-center gap-8 text-sm font-semibold text-neutral-500">
-            <Link href="/#features" className="hover:text-neutral-900">Features</Link>
-            <Link href="/#preview" className="hover:text-neutral-900">Preview</Link>
-            <Link href="/pricing" className="text-neutral-900">Pricing</Link>
-            <Link href="/#faq" className="hover:text-neutral-900">FAQ</Link>
+            <Link href="/#features" className="hover:text-neutral-900">Características</Link>
+            <Link href="/#preview" className="hover:text-neutral-900">Vista Previa</Link>
+            <Link href="/pricing" className="text-neutral-900">Precios</Link>
+            <Link href="/#faq" className="hover:text-neutral-900">Preguntas Frecuentes</Link>
           </nav>
 
           <div className="hidden md:flex items-center gap-3">
             <Link href="/login">
               <Button variant="ghost" className="text-sm font-semibold hover:bg-neutral-50 rounded-lg h-9.5 px-4 text-neutral-600 hover:text-neutral-900">
-                Sign In
+                Iniciar Sesión
               </Button>
             </Link>
             <Link href="/signup">
               <Button className="bg-neutral-950 hover:bg-neutral-900 text-white font-semibold rounded-lg text-sm h-9.5 px-4 shadow-sm transition-all cursor-pointer">
-                Get Started Free
+                Comenzar Gratis
               </Button>
             </Link>
           </div>
@@ -114,10 +114,10 @@ export default function PricingPage() {
       <section className="pt-20 pb-12 bg-radial from-emerald-50/20 via-white to-white text-center">
         <div className="max-w-3xl mx-auto px-6">
           <h1 className="text-4xl sm:text-5xl font-black tracking-tight text-neutral-950 leading-tight">
-            Transparent Pricing for <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-600">Modern Animal Care</span>.
+            Precios Transparentes para el <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-600">Cuidado Animal Moderno</span>.
           </h1>
           <p className="text-base text-neutral-500 max-w-xl mx-auto mt-4 leading-relaxed font-medium">
-            Start with our 14-day free trial. Upgrade or cancel anytime. Choose the plan that fits your veterinary practice scope.
+            Comienza con nuestra prueba gratuita de 14 días. Actualiza o cancela cuando quieras. Elige el plan que se adapte al tamaño de tu veterinaria.
           </p>
         </div>
       </section>
@@ -132,7 +132,7 @@ export default function PricingPage() {
             >
               {plan.highlighted && (
                 <span className="absolute -top-3.5 right-6 text-[9px] font-black uppercase tracking-wider bg-emerald-600 text-white px-3 py-1 rounded-full shadow-sm">
-                  Recommended
+                  Recomendado
                 </span>
               )}
               
@@ -148,7 +148,7 @@ export default function PricingPage() {
                 </div>
 
                 <div className="border-t border-neutral-100 pt-4">
-                  <p className="text-[10px] font-bold uppercase tracking-wider text-neutral-400 mb-3">Included features:</p>
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-neutral-400 mb-3">Características incluidas:</p>
                   <ul className="space-y-2.5">
                     {plan.features.map((feat, idx) => (
                       <li key={idx} className="flex items-start gap-2.5 text-xs text-neutral-600 font-medium leading-none">
@@ -178,17 +178,17 @@ export default function PricingPage() {
       <section className="py-20 bg-neutral-50/50 border-y border-neutral-100">
         <div className="max-w-4xl mx-auto px-6">
           <div className="text-center max-w-2xl mx-auto mb-12">
-            <h2 className="text-2xl font-bold text-neutral-900 tracking-tight">Detailed Feature Comparison</h2>
-            <p className="text-xs text-neutral-400 mt-2">See exactly what you get at each subscription tier.</p>
+            <h2 className="text-2xl font-bold text-neutral-900 tracking-tight">Comparativa Detallada de Características</h2>
+            <p className="text-xs text-neutral-400 mt-2">Mira exactamente lo que obtienes en cada nivel de suscripción.</p>
           </div>
 
           <div className="bg-white rounded-2xl border border-neutral-200/60 shadow-2xs overflow-hidden">
             <table className="w-full text-left text-xs border-collapse">
               <thead>
                 <tr className="bg-neutral-50 border-b border-neutral-100 text-[10px] font-bold uppercase tracking-wider text-neutral-500">
-                  <th className="p-4 px-6">Feature</th>
-                  <th className="p-4">Starter</th>
-                  <th className="p-4 px-6 text-right">Professional</th>
+                  <th className="p-4 px-6">Característica</th>
+                  <th className="p-4">Inicial</th>
+                  <th className="p-4 px-6 text-right">Profesional</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-neutral-100 font-medium">
@@ -209,7 +209,7 @@ export default function PricingPage() {
       <section className="py-20 bg-white">
         <div className="max-w-3xl mx-auto px-6">
           <div className="text-center mb-12">
-            <h2 className="text-2xl font-extrabold text-neutral-900 tracking-tight">Pricing FAQs</h2>
+            <h2 className="text-2xl font-extrabold text-neutral-900 tracking-tight">Preguntas Frecuentes sobre Precios</h2>
           </div>
           <div className="space-y-6">
             {FAQs.map((faq, i) => (
@@ -225,9 +225,9 @@ export default function PricingPage() {
       {/* Footer */}
       <footer className="bg-white border-t border-neutral-100 py-12">
         <div className="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between text-[10px] text-neutral-400 font-semibold gap-4">
-          <p>© 2026 VetControl Systems Inc. All rights reserved.</p>
+          <p>© 2026 VetControl Systems Inc. Todos los derechos reservados.</p>
           <p className="flex items-center gap-1">
-            Built for modern animal care with <Heart className="h-3 w-3 text-rose-500 fill-rose-500" /> globally.
+            Creado para el cuidado animal moderno con <Heart className="h-3 w-3 text-rose-500 fill-rose-500" /> globalmente.
           </p>
         </div>
       </footer>
@@ -240,7 +240,7 @@ export default function PricingPage() {
         className="fixed bottom-6 right-6 z-40 bg-emerald-500 hover:bg-emerald-600 text-white flex items-center gap-2 px-4 py-2.5 rounded-full shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:translate-y-px transition-all font-semibold text-xs leading-none select-none"
       >
         <MessageSquare className="h-4 w-4 fill-white/10" />
-        <span>Chat on WhatsApp</span>
+        <span>Chatea por WhatsApp</span>
       </a>
     </div>
   );

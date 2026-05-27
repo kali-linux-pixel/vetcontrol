@@ -14,7 +14,7 @@ export async function getSubscriptionStatus(): Promise<TrialStatus> {
     isTrial: true,
     remainingDays: 10,
     isExpired: false,
-    planName: 'Free Trial',
+    planName: 'Prueba Gratuita',
     status: 'trialing',
     clinicName: 'VetControl Downtown',
   };
@@ -26,12 +26,8 @@ export async function getSubscriptionStatus(): Promise<TrialStatus> {
       return { ...defaultStatus, isExpired: true, remainingDays: 0 };
     }
 
-    // 1. Fetch profile to find organization
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('organization_id')
-      .eq('id', user.id)
-      .single();
+    const { getProfileOrEnsure } = await import('./auth-utils');
+    const { profile } = await getProfileOrEnsure();
 
     if (!profile) {
       return defaultStatus;
@@ -67,18 +63,18 @@ export async function getSubscriptionStatus(): Promise<TrialStatus> {
     }
 
     const planNames: Record<string, string> = {
-      'free_trial': 'Free Trial',
-      'starter': 'Starter Plan ($9/mo)',
-      'professional': 'Professional Plan ($19/mo)'
+      'free_trial': 'Prueba Gratuita',
+      'starter': 'Plan Inicial ($9/mes)',
+      'professional': 'Plan Profesional ($19/mes)'
     };
 
     return {
       isTrial,
       remainingDays,
       isExpired,
-      planName: planNames[org.subscription_plan] || org.subscription_plan || 'Free Trial',
+      planName: planNames[org.subscription_plan] || org.subscription_plan || 'Prueba Gratuita',
       status: org.subscription_status || 'trialing',
-      clinicName: org.name || 'VetControl Clinic',
+      clinicName: org.name || 'Clínica VetControl',
     };
   } catch (error) {
     console.error('Error fetching subscription/trial status, falling back to mock trial status:', error);

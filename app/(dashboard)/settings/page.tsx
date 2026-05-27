@@ -13,11 +13,8 @@ export default async function Page() {
     redirect('/login');
   }
 
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('full_name, email, organization_id')
-    .eq('id', user.id)
-    .single();
+  const { getProfileOrEnsure } = await import('@/lib/auth-utils');
+  const { profile } = await getProfileOrEnsure();
 
   if (!profile) {
     redirect('/login');

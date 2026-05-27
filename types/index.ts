@@ -3,6 +3,8 @@ export interface Client {
   name: string;
   email: string;
   phone: string;
+  dni?: string;
+  address?: string;
   avatar?: string;
   petsCount: number;
   joinedDate: string;
@@ -16,6 +18,8 @@ export interface Pet {
   age: string;
   ownerName: string;
   ownerId: string;
+  sex?: string;
+  weight?: string;
   avatar?: string;
   lastVisit?: string;
 }
@@ -28,6 +32,8 @@ export interface Appointment {
   petName: string;
   petSpecies: Pet['species'];
   ownerName: string;
+  ownerPhone?: string;
+  ownerDni?: string;
   date: string;
   time: string;
   type: AppointmentType;

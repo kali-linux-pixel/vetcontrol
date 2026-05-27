@@ -42,121 +42,121 @@ export default function LandingClient() {
   const features = [
     {
       icon: Calendar,
-      title: 'Appointment Management',
-      description: 'Streamline scheduling with a multi-vet calendar, automated drag-and-drop bookings, and dynamic status tracking.',
-      badge: 'Real-time'
+      title: 'Gestión de Citas',
+      description: 'Optimiza la programación con un calendario multi-veterinario, reservas automatizadas de arrastrar y soltar, y seguimiento dinámico del estado.',
+      badge: 'Tiempo real'
     },
     {
       icon: Package,
-      title: 'Inventory Tracking',
-      description: 'Monitor stock levels, SKUs, and critical medications. VetControl flags low inventory and drafts restock lists.',
-      badge: 'Smart alert'
+      title: 'Seguimiento de Inventario',
+      description: 'Monitorea niveles de stock, SKUs y medicamentos críticos. VetControl detecta inventario bajo y genera listas de reabastecimiento.',
+      badge: 'Alerta inteligente'
     },
     {
       icon: Bell,
-      title: 'Automated Reminders',
-      description: 'Keep patients safe and boost return rates with scheduled email and SMS vaccine boosters and health check reminders.',
-      badge: 'Autopilot'
+      title: 'Recordatorios Automatizados',
+      description: 'Mantén a salvo a tus mascotas y aumenta el retorno de clientes con recordatorios programados por correo y SMS para vacunas y chequeos.',
+      badge: 'Piloto automático'
     },
     {
       icon: PawPrint,
-      title: 'Digital Patient Records',
-      description: 'Store rich clinical profiles, detailed ownership histories, species-specific metrics, and visit summaries in one secure place.',
-      badge: 'Unified'
+      title: 'Expedientes Digitales de Mascotas',
+      description: 'Almacena perfiles clínicos completos, historial detallado de propietarios, métricas de especies y resúmenes de visitas en un solo lugar seguro.',
+      badge: 'Unificado'
     },
     {
       icon: BarChart3,
-      title: 'Analytics & Reporting',
-      description: 'Track daily transactions, appointment densities, patient demographics, and medication turnovers via an intuitive sparkline chart.',
-      badge: 'Insights'
+      title: 'Métricas y Reportes',
+      description: 'Monitorea transacciones diarias, densidad de citas, datos demográficos de mascotas y rotación de medicamentos con un gráfico intuitivo.',
+      badge: 'Métricas'
     },
     {
       icon: Shield,
-      title: 'Secure Multi-Tenant Security',
-      description: 'Maintain strict patient data isolation. Every record is cryptographically scoped to your clinic with Role-Based Access Control.',
-      badge: 'HIPAA Compliant'
+      title: 'Seguridad Multi-inquilino Segura',
+      description: 'Mantén un estricto aislamiento de los datos. Cada registro está delimitado a tu clínica con Control de Acceso Basado en Roles.',
+      badge: 'Cumple HIPAA'
     }
   ];
 
   const pricingPlans = [
     {
-      name: 'Starter',
-      description: 'Perfect for independent veterinarians and mobile clinics.',
+      name: 'Plan Inicial',
+      description: 'Ideal para veterinarios independientes y clínicas móviles.',
       price: billingPeriod === 'monthly' ? 49 : 39,
       features: [
-        '1 Practitioner License',
-        'Up to 500 Active Patients',
-        'Standard Appointment Calendar',
-        'Basic Patient Records',
-        'Email Vaccine Reminders',
-        'Community Support'
+        '1 Licencia de Veterinario',
+        'Hasta 500 Mascotas Activas',
+        'Calendario de Citas Estándar',
+        'Historial Clínico Básico',
+        'Recordatorios de Vacunas por Correo',
+        'Soporte de la Comunidad'
       ],
       popular: false,
-      cta: 'Start with Starter'
+      cta: 'Comenzar con Plan Inicial'
     },
     {
-      name: 'Professional',
-      description: 'Designed for growing clinical practices and local clinics.',
+      name: 'Plan Profesional',
+      description: 'Diseñado para consultorios en crecimiento y clínicas locales.',
       price: billingPeriod === 'monthly' ? 99 : 79,
       features: [
-        '5 Practitioner Licenses',
-        'Unlimited Patients & Clients',
-        'Advanced Multi-Vet Scheduler',
-        'Smart Inventory Alerts & SKU logs',
-        'Automated SMS & Email Reminders',
-        'Business Revenue Analytics & Charting',
-        'Priority Support (24/7)'
+        '5 Licencias de Veterinarios',
+        'Mascotas y Clientes Ilimitados',
+        'Calendario Avanzado Multi-Veterinario',
+        'Alertas Inteligentes de Inventario y SKUs',
+        'Recordatorios Automáticos por SMS y Correo',
+        'Métricas y Gráficos de Ingresos',
+        'Soporte Prioritario (24/7)'
       ],
       popular: true,
-      cta: 'Try Professional Free'
+      cta: 'Probar Profesional Gratis'
     },
     {
-      name: 'Enterprise',
-      description: 'Enterprise control for veterinary hospital chains.',
-      price: 'Custom',
+      name: 'Plan Enterprise',
+      description: 'Control empresarial para cadenas de hospitales veterinarios.',
+      price: 'Personalizado',
       features: [
-        'Unlimited Licenses',
-        'Multi-Location Clinic Synchronization',
-        'Dedicated Database Instance',
-        'Custom EHR API Integrations',
-        'SLA Guarantee & Dedicated Manager',
-        'On-site Team Onboarding'
+        'Licencias Ilimitadas',
+        'Sincronización de Sedes Múltiples',
+        'Instancia de Base de Datos Dedicada',
+        'Integraciones Personalizadas con APIs EHR',
+        'Garantía de SLA y Gestor Dedicado',
+        'Capacitación Presencial para el Equipo'
       ],
       popular: false,
-      cta: 'Contact Hospital Sales'
+      cta: 'Contactar a Ventas'
     }
   ];
 
   const FAQs = [
     {
-      q: 'How does the multi-tenant architecture protect clinic records?',
-      a: 'VetControl uses a hardened multi-tenant system. Database rows for profiles, clients, pets, appointments, and inventory are strictly scoped by a secure organization ID. This ensures your clinic’s records are completely isolated and private.'
+      q: '¿Cómo protege los registros clínicos la arquitectura multi-inquilino?',
+      a: 'VetControl utiliza un sistema multi-inquilino blindado. Las filas de la base de datos para perfiles, clientes, mascotas, citas e inventario están delimitadas estrictamente por un ID de organización seguro. Esto garantiza que los registros de tu clínica estén completamente aislados y privados.'
     },
     {
-      q: 'Can we import our existing clinical files?',
-      a: 'Yes! VetControl provides a simple import interface for CSV data. You can import your clients, pets, and inventory lists during onboarding or reach out to our migration specialists for customized assistance.'
+      q: '¿Podemos importar nuestros archivos clínicos existentes?',
+      a: '¡Sí! VetControl proporciona una interfaz de importación sencilla para archivos CSV. Puedes importar tus listas de clientes, mascotas e inventario durante el registro, o contactar a nuestros especialistas para asistencia personalizada.'
     },
     {
-      q: 'What channels does the vaccine reminder system use?',
-      a: 'The system can send automated notifications via Email and SMS directly to pet owners. Reminders are configured automatically based on the pet’s vaccination history and upcoming booster schedules.'
+      q: '¿Qué canales utiliza el sistema de recordatorios de vacunas?',
+      a: 'El sistema puede enviar notificaciones automáticas por correo electrónico y SMS directamente a los propietarios. Los recordatorios se configuran en función del historial de vacunación y los próximos refuerzos.'
     },
     {
-      q: 'Is there a limit on patient profiles in the Professional plan?',
-      a: 'None! The Professional and Enterprise plans offer unlimited client and patient storage, allowing your practice to scale without worrying about capacity caps.'
+      q: '¿Hay un límite de expedientes de mascotas en el plan Profesional?',
+      a: '¡Ninguno! Los planes Profesional y Enterprise ofrecen almacenamiento ilimitado de clientes y mascotas, permitiendo que tu clínica crezca sin preocuparte por límites de capacidad.'
     }
   ];
 
   const testimonials = [
     {
-      quote: "VetControl has revolutionized how our clinic operates. The automated vaccine reminders alone have increased patient return rates by 34%. It is clean, exceptionally fast, and completely intuitive.",
-      author: "Dr. Sarah Connor, DVM",
-      role: "Founder, Cyberdyne Veterinary Hospital",
+      quote: "VetControl ha revolucionado el funcionamiento de nuestra clínica. Solo los recordatorios automáticos de vacunas han aumentado las tasas de retorno de pacientes en un 34%. Es limpio, excepcionalmente rápido y completamente intuitivo.",
+      author: "Dra. Sarah Connor, DVM",
+      role: "Fundadora, Hospital Veterinario Cyberdyne",
       avatarInitials: "SC"
     },
     {
-      quote: "We migrated from a legacy desktop system to VetControl in under an hour. Tracking critical medical inventory like vaccines and antibiotics is now automated, preventing stock shortages.",
+      quote: "Migramos de un sistema de escritorio antiguo a VetControl en menos de una hora. El seguimiento del inventario médico crítico, como vacunas y antibióticos, ahora está automatizado, evitando la escasez de stock.",
       author: "Dr. James Herriot",
-      role: "Senior Veterinarian, Yorkshire Animal Clinic",
+      role: "Veterinario Principal, Clínica de Animales de Yorkshire",
       avatarInitials: "JH"
     }
   ];
@@ -182,9 +182,9 @@ export default function LandingClient() {
 
           {/* Desktop Nav links */}
           <nav className="hidden md:flex items-center gap-8 text-sm font-semibold text-neutral-500">
-            <a href="#features" className="hover:text-neutral-900 transition-colors">Features</a>
-            <a href="#preview" className="hover:text-neutral-900 transition-colors">Preview</a>
-            <a href="#pricing" className="hover:text-neutral-900 transition-colors">Pricing</a>
+            <a href="#features" className="hover:text-neutral-900 transition-colors">Características</a>
+            <a href="#preview" className="hover:text-neutral-900 transition-colors">Vista Previa</a>
+            <a href="#pricing" className="hover:text-neutral-900 transition-colors">Precios</a>
             <a href="#faq" className="hover:text-neutral-900 transition-colors">FAQ</a>
           </nav>
 
@@ -192,12 +192,12 @@ export default function LandingClient() {
           <div className="hidden md:flex items-center gap-3">
             <Link href="/login">
               <Button variant="ghost" className="text-sm font-semibold hover:bg-neutral-50 rounded-lg h-9.5 px-4 text-neutral-600 hover:text-neutral-900">
-                Sign In
+                Iniciar Sesión
               </Button>
             </Link>
             <Link href="/login">
               <Button className="bg-neutral-950 hover:bg-neutral-900 text-white font-semibold rounded-lg text-sm h-9.5 px-4 shadow-sm transition-all">
-                Get Started Free
+                Comenzar Gratis
               </Button>
             </Link>
           </div>
@@ -237,21 +237,21 @@ export default function LandingClient() {
             </div>
             
             <nav className="flex flex-col gap-6 py-12 text-lg font-semibold text-neutral-600">
-              <a href="#features" onClick={() => setMobileMenuOpen(false)} className="hover:text-neutral-900">Features</a>
-              <a href="#preview" onClick={() => setMobileMenuOpen(false)} className="hover:text-neutral-900">Preview</a>
-              <a href="#pricing" onClick={() => setMobileMenuOpen(false)} className="hover:text-neutral-900">Pricing</a>
+              <a href="#features" onClick={() => setMobileMenuOpen(false)} className="hover:text-neutral-900">Características</a>
+              <a href="#preview" onClick={() => setMobileMenuOpen(false)} className="hover:text-neutral-900">Vista Previa</a>
+              <a href="#pricing" onClick={() => setMobileMenuOpen(false)} className="hover:text-neutral-900">Precios</a>
               <a href="#faq" onClick={() => setMobileMenuOpen(false)} className="hover:text-neutral-900">FAQ</a>
             </nav>
 
             <div className="mt-auto space-y-3 pb-8">
               <Link href="/login" onClick={() => setMobileMenuOpen(false)} className="block w-full">
                 <Button variant="outline" className="w-full h-11 text-base font-semibold border-neutral-200 text-neutral-800 rounded-xl">
-                  Sign In
+                  Iniciar Sesión
                 </Button>
               </Link>
               <Link href="/login" onClick={() => setMobileMenuOpen(false)} className="block w-full">
                 <Button className="w-full h-11 text-base font-semibold bg-neutral-950 text-white rounded-xl">
-                  Get Started Free
+                  Comenzar Gratis
                 </Button>
               </Link>
             </div>
@@ -272,7 +272,7 @@ export default function LandingClient() {
             className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-100/80 text-emerald-800 font-semibold text-xs mb-6"
           >
             <Sparkles className="h-3.5 w-3.5 fill-emerald-100" />
-            <span>Meet VetControl v2.0 for Web & Mobile</span>
+            <span>Conoce VetControl v2.0 para Web y Móvil</span>
           </motion.div>
 
           <motion.h1
@@ -281,7 +281,7 @@ export default function LandingClient() {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="text-4xl sm:text-6xl font-black tracking-tight text-neutral-950 leading-[1.08] lg:text-7xl font-sans"
           >
-            The Operating System for <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-600">Modern Veterinary</span> Practices.
+            El Sistema Operativo para Clínicas <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-600">Veterinarias Modernas</span>.
           </motion.h1>
 
           <motion.p
@@ -290,7 +290,7 @@ export default function LandingClient() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-base sm:text-lg text-neutral-500 max-w-2xl mx-auto mt-6 leading-relaxed font-medium"
           >
-            A high-performance, multi-tenant workspace built to streamline patient charting, coordinate schedules, automate vaccine alerts, and manage medical stocks.
+            Un espacio de trabajo multi-inquilino de alto rendimiento diseñado para agilizar el historial clínico, coordinar horarios, automatizar alertas de vacunas y gestionar el stock médico.
           </motion.p>
 
           <motion.div
@@ -301,13 +301,13 @@ export default function LandingClient() {
           >
             <Link href="/login" className="w-full sm:w-auto">
               <Button className="w-full sm:w-auto bg-neutral-950 hover:bg-neutral-900 text-white font-semibold h-11 px-6 rounded-xl text-sm flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transition-all">
-                Start Free Trial
+                Iniciar Prueba Gratuita
                 <ArrowRight className="h-4 w-4" />
               </Button>
             </Link>
             <a href="#preview" className="w-full sm:w-auto">
               <Button variant="outline" className="w-full sm:w-auto border-neutral-200 bg-white hover:bg-neutral-50 text-neutral-700 hover:text-neutral-900 font-semibold h-11 px-6 rounded-xl text-sm">
-                Explore Dashboard
+                Explorar Tablero / Panel
               </Button>
             </a>
           </motion.div>
@@ -335,7 +335,7 @@ export default function LandingClient() {
               </div>
               <div className="flex items-center gap-1.5 text-[10px] text-neutral-400 font-semibold bg-white border border-neutral-200/85 px-3 py-1 rounded-md shadow-xs">
                 <Shield className="h-3 w-3 text-emerald-500" />
-                <span>app.vetcontrol.io/dashboard (Encrypted)</span>
+                <span>app.vetcontrol.io/dashboard (Encriptado)</span>
               </div>
               <div className="w-12" />
             </div>
@@ -351,7 +351,7 @@ export default function LandingClient() {
                   <span className="font-bold text-xs text-neutral-900">VetControl</span>
                 </div>
                 <div className="space-y-1.5 py-6">
-                  {['Dashboard', 'Clients', 'Pets', 'Appointments', 'Inventory', 'Analytics'].map((name, i) => (
+                  {['Tablero / Panel', 'Clientes', 'Mascotas', 'Citas', 'Inventario', 'Métricas'].map((name, i) => (
                     <div 
                       key={name} 
                       className={`flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-[11px] font-semibold ${i === 0 ? 'bg-neutral-50 text-neutral-900' : 'text-neutral-400'}`}
@@ -368,8 +368,8 @@ export default function LandingClient() {
                 {/* Mock header */}
                 <div className="flex justify-between items-center pb-4 border-b border-neutral-100">
                   <div>
-                    <h3 className="font-bold text-sm text-neutral-900 leading-none">Downtown Veterinary Clinic</h3>
-                    <p className="text-[10px] text-neutral-400 mt-1">Multi-tenant secure sandbox</p>
+                    <h3 className="font-bold text-sm text-neutral-900 leading-none">Clínica Veterinaria Centro</h3>
+                    <p className="text-[10px] text-neutral-400 mt-1">Entorno multi-inquilino seguro</p>
                   </div>
                   <div className="h-7 w-7 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold text-[10px]">
                     EB
@@ -379,9 +379,9 @@ export default function LandingClient() {
                 {/* Grid of cards */}
                 <div className="grid grid-cols-3 gap-3">
                   {[
-                    { label: 'Total Clients', value: '412', change: '+12.4%', color: 'text-emerald-600' },
-                    { label: 'Active Patients', value: '894', change: '+8.1%', color: 'text-emerald-600' },
-                    { label: 'Today\'s Bookings', value: '17', change: '+15.2%', color: 'text-emerald-600' }
+                    { label: 'Total de Clientes', value: '412', change: '+12.4%', color: 'text-emerald-600' },
+                    { label: 'Mascotas Activas', value: '894', change: '+8.1%', color: 'text-emerald-600' },
+                    { label: 'Citas de Hoy', value: '17', change: '+15.2%', color: 'text-emerald-600' }
                   ].map((stat, i) => (
                     <div key={i} className="p-3 border border-neutral-100 rounded-lg bg-neutral-50/50 shadow-2xs">
                       <p className="text-[9px] text-neutral-400 font-semibold uppercase tracking-wider">{stat.label}</p>
@@ -398,22 +398,22 @@ export default function LandingClient() {
                   {/* Appointment Mock List */}
                   <div className="p-3.5 border border-neutral-100 rounded-xl space-y-3">
                     <div className="flex justify-between items-center">
-                      <span className="text-[10px] font-bold text-neutral-800">Next Appointments</span>
-                      <span className="text-[9px] font-semibold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded-full">Live</span>
+                      <span className="text-[10px] font-bold text-neutral-800">Próximas Citas</span>
+                      <span className="text-[9px] font-semibold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded-full">En vivo</span>
                     </div>
                     <div className="space-y-2">
                       {[
-                        { time: '09:00 AM', pet: 'Max (German Shepherd)', type: 'Consultation', status: 'Checked-in' },
-                        { time: '10:30 AM', pet: 'Milo (Tabby Cat)', type: 'Surgery', status: 'In-Progress' },
-                        { time: '01:15 PM', pet: 'Ace (Great Dane)', type: 'Check-up', status: 'Scheduled' }
+                        { time: '09:00 AM', pet: 'Max (Pastor Alemán)', type: 'Consulta', status: 'Checked-in' },
+                        { time: '10:30 AM', pet: 'Milo (Gato Mestizo)', type: 'Cirugía', status: 'In-Progress' },
+                        { time: '01:15 PM', pet: 'Ace (Gran Danés)', type: 'Chequeo General', status: 'Scheduled' }
                       ].map((apt, i) => (
                         <div key={i} className="flex justify-between items-center p-2 rounded-lg bg-neutral-50/70 border border-neutral-100/50">
                           <div className="space-y-0.5">
                             <p className="text-[10px] font-bold text-neutral-800">{apt.pet}</p>
-                            <p className="text-[8px] text-neutral-400 font-medium">{apt.type} • {apt.time}</p>
+                            <p className="text-[8px] text-neutral-400 font-medium">{apt.type === 'Consultation' ? 'Consulta' : apt.type === 'Surgery' ? 'Cirugía' : 'Chequeo'} • {apt.time}</p>
                           </div>
                           <span className={`text-[8px] font-bold px-1.5 py-0.5 rounded-full ${apt.status === 'Checked-in' ? 'bg-emerald-50 text-emerald-700' : apt.status === 'In-Progress' ? 'bg-amber-50 text-amber-700' : 'bg-neutral-100 text-neutral-600'}`}>
-                            {apt.status}
+                            {apt.status === 'Checked-in' ? 'En Espera' : apt.status === 'In-Progress' ? 'En Curso' : 'Programada'}
                           </span>
                         </div>
                       ))}
@@ -424,13 +424,13 @@ export default function LandingClient() {
                   <div className="p-3.5 border border-neutral-100 rounded-xl flex flex-col justify-between">
                     <div>
                       <div className="flex justify-between items-center">
-                        <span className="text-[10px] font-bold text-neutral-800">Weekly Performance</span>
+                        <span className="text-[10px] font-bold text-neutral-800">Rendimiento Semanal</span>
                         <div className="flex items-center gap-1 text-[8px] font-bold text-emerald-600">
                           <TrendingUp className="h-3 w-3" />
-                          <span>+23.4% Revenue</span>
+                          <span>+23.4% Ingresos</span>
                         </div>
                       </div>
-                      <p className="text-[9px] text-neutral-400 mt-0.5">Clinical transaction diagnostics</p>
+                      <p className="text-[9px] text-neutral-400 mt-0.5">Diagnóstico de transacciones clínicas</p>
                     </div>
 
                     {/* SVG Sparkline */}
@@ -462,10 +462,10 @@ export default function LandingClient() {
                     </div>
 
                     <div className="flex justify-between text-[8px] text-neutral-400 font-semibold pt-2 border-t border-neutral-50">
-                      <span>Mon</span>
-                      <span>Wed</span>
-                      <span>Fri</span>
-                      <span>Today</span>
+                      <span>Lun</span>
+                      <span>Mié</span>
+                      <span>Vie</span>
+                      <span>Hoy</span>
                     </div>
                   </div>
                 </div>
@@ -480,9 +480,9 @@ export default function LandingClient() {
       <section id="features" className="py-24 bg-neutral-50/50 border-y border-neutral-100">
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center max-w-2xl mx-auto mb-16">
-            <span className="text-xs font-bold uppercase tracking-wider text-emerald-600">Enterprise Grade Features</span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-neutral-900 mt-2 tracking-tight">Everything your clinic needs. None of the complexity.</h2>
-            <p className="text-sm sm:text-base text-neutral-500 mt-4 leading-relaxed">We stripped away the clunky interfaces of legacy software to build a streamlined workspace designed for pace and efficiency.</p>
+            <span className="text-xs font-bold uppercase tracking-wider text-emerald-600">Características de Nivel Empresarial</span>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-neutral-900 mt-2 tracking-tight">Todo lo que tu clínica necesita. Sin complicaciones.</h2>
+            <p className="text-sm sm:text-base text-neutral-500 mt-4 leading-relaxed">Eliminamos las interfaces lentas del software antiguo para crear un espacio de trabajo ágil diseñado para el ritmo y la eficiencia.</p>
           </div>
 
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -522,8 +522,8 @@ export default function LandingClient() {
       <section className="py-24 bg-white">
         <div className="max-w-4xl mx-auto px-6">
           <div className="text-center mb-16">
-            <span className="text-xs font-bold uppercase tracking-wider text-emerald-600">Trusted by Veterinarians</span>
-            <h2 className="text-3xl font-extrabold text-neutral-900 mt-2 tracking-tight">Approved by clinical leads.</h2>
+            <span className="text-xs font-bold uppercase tracking-wider text-emerald-600">De Confianza por Veterinarios</span>
+            <h2 className="text-3xl font-extrabold text-neutral-900 mt-2 tracking-tight">Aprobado por directores clínicos.</h2>
           </div>
 
           <div className="grid gap-8 md:grid-cols-2">
@@ -558,9 +558,9 @@ export default function LandingClient() {
       <section id="pricing" className="py-24 bg-neutral-50/50 border-t border-neutral-100">
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center max-w-2xl mx-auto mb-12">
-            <span className="text-xs font-bold uppercase tracking-wider text-emerald-600">Simple Transparent Pricing</span>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-neutral-900 mt-2 tracking-tight">Designed to grow with your practice.</h2>
-            <p className="text-sm text-neutral-500 mt-4 leading-relaxed">Start running in minutes. No credit card required to try.</p>
+            <span className="text-xs font-bold uppercase tracking-wider text-emerald-600">Precios Simples y Transparentes</span>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-neutral-900 mt-2 tracking-tight">Diseñado para crecer con tu clínica.</h2>
+            <p className="text-sm text-neutral-500 mt-4 leading-relaxed">Comienza a operar en minutos. No se requiere tarjeta de crédito para probar.</p>
 
             {/* Toggle monthly / annual */}
             <div className="inline-flex items-center bg-white border border-neutral-200 p-1 rounded-xl mt-8 shadow-2xs">
@@ -568,14 +568,14 @@ export default function LandingClient() {
                 onClick={() => setBillingPeriod('monthly')}
                 className={`px-4 py-1.5 rounded-lg text-xs font-semibold transition-all ${billingPeriod === 'monthly' ? 'bg-neutral-950 text-white' : 'text-neutral-500 hover:text-neutral-800'}`}
               >
-                Monthly billing
+                Facturación mensual
               </button>
               <button 
                 onClick={() => setBillingPeriod('annual')}
                 className={`px-4 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all ${billingPeriod === 'annual' ? 'bg-neutral-950 text-white' : 'text-neutral-500 hover:text-neutral-800'}`}
               >
-                Annual billing
-                <span className="text-[9px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-100 px-1.5 py-0.5 rounded-md">Save 20%</span>
+                Facturación anual
+                <span className="text-[9px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-100 px-1.5 py-0.5 rounded-md">Ahorra 20%</span>
               </button>
             </div>
           </div>
@@ -588,7 +588,7 @@ export default function LandingClient() {
               >
                 {plan.popular && (
                   <span className="absolute -top-3.5 right-6 text-[9px] font-bold uppercase tracking-widest bg-emerald-600 text-white px-3 py-1 rounded-full shadow-sm">
-                    Most Popular
+                    Más Popular
                   </span>
                 )}
                 
@@ -603,12 +603,12 @@ export default function LandingClient() {
                       {typeof plan.price === 'number' ? `$${plan.price}` : plan.price}
                     </span>
                     {typeof plan.price === 'number' && (
-                      <span className="text-xs text-neutral-400 font-semibold">/ month</span>
+                      <span className="text-xs text-neutral-400 font-semibold">/ mes</span>
                     )}
                   </div>
 
                   <div className="border-t border-neutral-100 pt-4">
-                    <p className="text-[10px] font-bold uppercase tracking-wider text-neutral-400 mb-3">Included features:</p>
+                    <p className="text-[10px] font-bold uppercase tracking-wider text-neutral-400 mb-3">Características incluidas:</p>
                     <ul className="space-y-2.5">
                       {plan.features.map((feat, index) => (
                         <li key={index} className="flex items-start gap-2.5 text-xs text-neutral-600 font-medium">
@@ -639,8 +639,8 @@ export default function LandingClient() {
       <section id="faq" className="py-24 bg-white border-t border-neutral-100">
         <div className="max-w-3xl mx-auto px-6">
           <div className="text-center mb-16">
-            <span className="text-xs font-bold uppercase tracking-wider text-emerald-600">Frequently Asked Questions</span>
-            <h2 className="text-3xl font-extrabold text-neutral-900 mt-2 tracking-tight">Got questions? We have answers.</h2>
+            <span className="text-xs font-bold uppercase tracking-wider text-emerald-600">Preguntas Frecuentes</span>
+            <h2 className="text-3xl font-extrabold text-neutral-900 mt-2 tracking-tight">¿Tienes preguntas? Tenemos respuestas.</h2>
           </div>
 
           <div className="space-y-3.5">
@@ -689,24 +689,24 @@ export default function LandingClient() {
 
         <div className="max-w-4xl mx-auto px-6 text-center space-y-6 relative z-10">
           <span className="text-xs font-bold uppercase tracking-widest text-emerald-400 bg-emerald-950/80 border border-emerald-900/60 px-3 py-1 rounded-full">
-            Modernize Today
+            Modernízate Hoy
           </span>
-          <h2 className="text-3xl sm:text-5xl font-black tracking-tight leading-none">Ready to upgrade your veterinary practice?</h2>
+          <h2 className="text-3xl sm:text-5xl font-black tracking-tight leading-none">¿Listo para actualizar tu práctica veterinaria?</h2>
           <p className="text-xs sm:text-sm text-neutral-400 max-w-xl mx-auto leading-relaxed">
-            Create your account in under 2 minutes. Start running appointments, automated vaccine reminders, and inventory tracking today.
+            Crea tu cuenta en menos de 2 minutos. Comienza a gestionar citas, recordatorios automáticos de vacunas y seguimiento de inventario hoy.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-4">
             <Link href="/login" className="w-full sm:w-auto">
               <Button className="w-full sm:w-auto bg-white hover:bg-neutral-100 text-neutral-900 font-semibold h-11 px-6 rounded-xl text-xs flex items-center justify-center gap-1.5 shadow-md">
-                Register Clinic Account
+                Registrar Cuenta de Clínica
                 <ArrowRight className="h-3.5 w-3.5" />
               </Button>
             </Link>
             <a href="https://wa.me/51948097148?text=Hola%20%F0%9F%91%8B%20estoy%20interesado%20en%20VetControl%20para%20mi%20veterinaria." target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
               <Button variant="outline" className="w-full sm:w-auto border-neutral-800 bg-neutral-900 hover:bg-neutral-850 hover:text-white text-neutral-300 font-semibold h-11 px-6 rounded-xl text-xs flex items-center justify-center gap-1.5">
                 <MessageSquare className="h-3.5 w-3.5 text-emerald-400 fill-emerald-400/10" />
-                Speak to a Specialist
+                Hablar con un Especialista
               </Button>
             </a>
           </div>
@@ -724,42 +724,42 @@ export default function LandingClient() {
               <span className="font-bold text-sm text-neutral-900">VetControl</span>
             </div>
             <p className="text-[11px] text-neutral-400 leading-relaxed font-medium">
-              The high-performance veterinary practice management platform. Engineered for efficiency, scalability, and multi-tenant security.
+              La plataforma de gestión de consultorios veterinarios de alto rendimiento. Diseñada para la eficiencia, escalabilidad y seguridad multi-inquilino.
             </p>
           </div>
 
           <div>
-            <h4 className="text-[10px] font-bold uppercase tracking-wider text-neutral-400 mb-3">Product</h4>
+            <h4 className="text-[10px] font-bold uppercase tracking-wider text-neutral-400 mb-3">Producto</h4>
             <ul className="space-y-2 text-xs font-semibold text-neutral-500">
-              <li><a href="#features" className="hover:text-neutral-900">Features</a></li>
-              <li><a href="#preview" className="hover:text-neutral-900">Live Preview</a></li>
-              <li><a href="#pricing" className="hover:text-neutral-900">Pricing Plans</a></li>
+              <li><a href="#features" className="hover:text-neutral-900">Características</a></li>
+              <li><a href="#preview" className="hover:text-neutral-900">Vista Previa</a></li>
+              <li><a href="#pricing" className="hover:text-neutral-900">Planes de Precios</a></li>
             </ul>
           </div>
 
           <div>
-            <h4 className="text-[10px] font-bold uppercase tracking-wider text-neutral-400 mb-3">Resources</h4>
+            <h4 className="text-[10px] font-bold uppercase tracking-wider text-neutral-400 mb-3">Recursos</h4>
             <ul className="space-y-2 text-xs font-semibold text-neutral-500">
               <li><a href="#faq" className="hover:text-neutral-900">FAQ</a></li>
-              <li><a href="#" className="hover:text-neutral-900">Release Notes</a></li>
-              <li><a href="#" className="hover:text-neutral-900">Developer API</a></li>
+              <li><a href="#" className="hover:text-neutral-900">Notas de Versión</a></li>
+              <li><a href="#" className="hover:text-neutral-900">API para Desarrolladores</a></li>
             </ul>
           </div>
 
           <div>
             <h4 className="text-[10px] font-bold uppercase tracking-wider text-neutral-400 mb-3">Legal</h4>
             <ul className="space-y-2 text-xs font-semibold text-neutral-500">
-              <li><a href="#" className="hover:text-neutral-900">Privacy Policy</a></li>
-              <li><a href="#" className="hover:text-neutral-900">Terms of Service</a></li>
-              <li><a href="#" className="hover:text-neutral-900">Security Scopes</a></li>
+              <li><a href="#" className="hover:text-neutral-900">Política de Privacidad</a></li>
+              <li><a href="#" className="hover:text-neutral-900">Términos de Servicio</a></li>
+              <li><a href="#" className="hover:text-neutral-900">Alcance de Seguridad</a></li>
             </ul>
           </div>
         </div>
 
         <div className="max-w-7xl mx-auto px-6 mt-12 pt-6 border-t border-neutral-100 flex flex-col sm:flex-row items-center justify-between text-[10px] text-neutral-400 font-semibold gap-4">
-          <p>© 2026 VetControl Systems Inc. All rights reserved.</p>
+          <p>© 2026 VetControl Systems Inc. Todos los derechos reservados.</p>
           <p className="flex items-center gap-1">
-            Built for modern animal care with <Heart className="h-3 w-3 text-rose-500 fill-rose-500" /> globally.
+            Creado para el cuidado animal moderno con <Heart className="h-3 w-3 text-rose-500 fill-rose-500" /> globalmente.
           </p>
         </div>
       </footer>
@@ -772,7 +772,7 @@ export default function LandingClient() {
         className="fixed bottom-6 right-6 z-40 bg-emerald-500 hover:bg-emerald-600 text-white flex items-center gap-2 px-4 py-2.5 rounded-full shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:translate-y-px transition-all font-semibold text-xs leading-none select-none"
       >
         <MessageSquare className="h-4 w-4 fill-white/10" />
-        <span>Chat on WhatsApp</span>
+        <span>Chatea por WhatsApp</span>
       </a>
     </div>
   );

@@ -19,13 +19,10 @@ export default async function Page() {
   let clientsList = mockClients.map(c => ({ id: c.id, name: c.name }));
 
   try {
-    const { data: profile, error: profileErr } = await supabase
-      .from('profiles')
-      .select('organization_id')
-      .eq('id', user.id)
-      .single();
+    const { getProfileOrEnsure } = await import('@/lib/auth-utils');
+    const { profile } = await getProfileOrEnsure();
 
-    if (profile && !profileErr) {
+    if (profile) {
       const orgId = profile.organization_id;
 
       // 1. Fetch pets with owner names using relation join
@@ -37,6 +34,8 @@ export default async function Page() {
           species,
           breed,
           age,
+          sex,
+          weight,
           avatar_url,
           last_visit,
           client_id,
@@ -61,6 +60,8 @@ export default async function Page() {
           species: p.species as any,
           breed: p.breed,
           age: p.age,
+          sex: p.sex || undefined,
+          weight: p.weight || undefined,
           ownerName: p.clients?.name || 'Unknown',
           ownerId: p.client_id,
           avatar: p.avatar_url || undefined,

@@ -23,17 +23,17 @@ export default function SignupPage() {
             <Shield className="h-5 w-5 text-emerald-400 fill-emerald-400/10" />
           </div>
           <h1 className="text-xl font-bold tracking-tight text-neutral-900">VetControl</h1>
-          <p className="text-xs text-neutral-400 mt-1">Multi-tenant Veterinary SaaS Platform</p>
+          <p className="text-xs text-neutral-400 mt-1">Plataforma SaaS Veterinaria Multi-inquilino</p>
         </Link>
 
         {/* Signup Card */}
         <Card className="border border-neutral-200/60 bg-white shadow-xs rounded-xl overflow-hidden">
           <CardHeader className="pb-4">
             <CardTitle className="text-lg font-semibold text-neutral-900">
-              Register your clinic
+              Registrar tu clínica
             </CardTitle>
             <CardDescription className="text-xs text-neutral-500">
-              Create a new tenant organization to get started
+              Crea una nueva organización de clínica para comenzar
             </CardDescription>
           </CardHeader>
           
@@ -49,10 +49,10 @@ export default function SignupPage() {
 
               {/* Clinic Name */}
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-neutral-500">Clinic / Org Name</label>
+                <label className="text-xs font-semibold text-neutral-500">Nombre de la Clínica / Org</label>
                 <Input 
                   name="clinicName" 
-                  placeholder="Downtown Vet Clinic" 
+                  placeholder="Clínica Veterinaria Centro" 
                   required 
                   className="h-9 text-xs" 
                   disabled={signupPending}
@@ -61,7 +61,7 @@ export default function SignupPage() {
 
               {/* Admin Full Name */}
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-neutral-500">Full Name</label>
+                <label className="text-xs font-semibold text-neutral-500">Nombre Completo</label>
                 <Input 
                   name="fullName" 
                   placeholder="Dr. Elizabeth Blackwell" 
@@ -73,11 +73,11 @@ export default function SignupPage() {
 
               {/* Email */}
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-neutral-500">Email Address</label>
+                <label className="text-xs font-semibold text-neutral-500">Correo Electrónico</label>
                 <Input 
                   name="email" 
                   type="email" 
-                  placeholder="name@clinic.com" 
+                  placeholder="nombre@clinica.com" 
                   required 
                   className="h-9 text-xs" 
                   disabled={signupPending}
@@ -86,7 +86,7 @@ export default function SignupPage() {
 
               {/* Password */}
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-neutral-500">Password</label>
+                <label className="text-xs font-semibold text-neutral-500">Contraseña</label>
                 <Input 
                   name="password" 
                   type="password" 
@@ -105,14 +105,14 @@ export default function SignupPage() {
                 disabled={signupPending}
               >
                 {signupPending && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
-                Create Organization Account
+                Crear Cuenta de Organización
               </Button>
 
               <Link
                 href="/login"
                 className="text-xs text-neutral-500 hover:text-neutral-900 font-medium transition-colors hover:underline mt-1"
               >
-                Already registered? Sign in instead
+                ¿Ya estás registrado? Inicia sesión
               </Link>
             </CardFooter>
           </form>

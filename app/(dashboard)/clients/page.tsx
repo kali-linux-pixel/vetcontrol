@@ -18,13 +18,10 @@ export default async function Page() {
   let initialClients: Client[] = mockClients;
 
   try {
-    const { data: profile, error: profileErr } = await supabase
-      .from('profiles')
-      .select('organization_id')
-      .eq('id', user.id)
-      .single();
+    const { getProfileOrEnsure } = await import('@/lib/auth-utils');
+    const { profile } = await getProfileOrEnsure();
 
-    if (profile && !profileErr) {
+    if (profile) {
       const orgId = profile.organization_id;
 
       // Fetch clients and count active pets via join queries
@@ -35,6 +32,8 @@ export default async function Page() {
           name,
           email,
           phone,
+          dni,
+          address,
           joined_date,
           pets (
             id
@@ -49,6 +48,8 @@ export default async function Page() {
           name: c.name,
           email: c.email,
           phone: c.phone,
+          dni: c.dni || '',
+          address: c.address || '',
           joinedDate: c.joined_date,
           petsCount: c.pets?.length || 0,
         }));

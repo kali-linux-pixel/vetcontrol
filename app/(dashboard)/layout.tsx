@@ -6,6 +6,8 @@ import { redirect } from 'next/navigation';
 import { getSubscriptionStatus } from '@/lib/subscription';
 import { TrialBanner } from '@/components/layout/trial-banner';
 
+import { getProfileOrEnsure } from '@/lib/auth-utils';
+
 interface DashboardLayoutProps {
   children: React.ReactNode;
 }
@@ -19,20 +21,12 @@ export default async function DashboardLayout({ children }: DashboardLayoutProps
     redirect('/login');
   }
 
-  // Fetch subscription trial info
-  const statusInfo = await getSubscriptionStatus();
-
-  // Fetch user profile and organization info
+  // Fetch user profile and organization info (heals profile/organization automatically if missing)
   let profileName = 'Dr. E. Blackwell';
   let clinicName = 'VetControl Downtown';
 
   try {
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('full_name, organization_id')
-      .eq('id', user.id)
-      .single();
-
+    const { profile } = await getProfileOrEnsure();
     if (profile) {
       if (profile.full_name) {
         profileName = profile.full_name;
@@ -50,7 +44,11 @@ export default async function DashboardLayout({ children }: DashboardLayoutProps
     }
   } catch (err) {
     // Graceful fallback to defaults
+    console.error('Layout: Failed to ensure user profile/org:', err);
   }
+
+  // Fetch subscription trial info
+  const statusInfo = await getSubscriptionStatus();
 
   return (
     <div className="flex h-screen w-screen overflow-hidden bg-neutral-50/50 font-sans">
