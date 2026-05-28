@@ -80,9 +80,7 @@ export default function ChatClient({ clinicId }: ChatClientProps) {
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
   // Dynamic API Host base
-  const apiHost = typeof window !== 'undefined' 
-    ? `${window.location.protocol}//${window.location.hostname}:3001`
-    : 'http://localhost:3001';
+  const apiHost = process.env.NEXT_PUBLIC_API_URL || 'https://vetcontrol-bot.onrender.com';
 
   // 1. Fetch conversations list
   const fetchConversations = async () => {

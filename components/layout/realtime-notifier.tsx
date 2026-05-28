@@ -24,10 +24,8 @@ export function RealtimeNotifier({ clinicId }: RealtimeNotifierProps) {
   useEffect(() => {
     if (!clinicId) return;
 
-    // Connect to the bot server port 3001 dynamically based on current host
-    const botUrl = typeof window !== 'undefined' 
-      ? `${window.location.protocol}//${window.location.hostname}:3001`
-      : 'http://localhost:3001';
+    // Connect to the bot server
+    const botUrl = process.env.NEXT_PUBLIC_SOCKET_URL || 'https://vetcontrol-bot.onrender.com';
 
     console.log(`🔌 Connecting client realtime socket to: ${botUrl}`);
     const socket = io(botUrl, {
