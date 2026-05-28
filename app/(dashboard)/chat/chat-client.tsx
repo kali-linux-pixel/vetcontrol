@@ -5,7 +5,7 @@ import { socket } from '@/src/lib/socket';
 import { 
   Search, MessageSquare, Send, Calendar, User, PawPrint, 
   Settings, Loader2, Sparkles, UserCheck, Shield, BookOpen, 
-  Clock, Check, CheckCheck, RefreshCw, Paperclip, FileText, Image as ImageIcon, Mic
+  Clock, Check, CheckCheck, RefreshCw, Paperclip, FileText, Image as ImageIcon, Mic, X
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -73,6 +73,9 @@ export default function ChatClient({ clinicId }: ChatClientProps) {
   // State indicators
   const [loading, setLoading] = useState(true);
   const [whatsappStatus, setWhatsappStatus] = useState<'connected' | 'disconnected' | 'qr'>('connected');
+  const [qrCode, setQrCode] = useState<string | null>(null);
+  const [isConnectModalOpen, setIsConnectModalOpen] = useState(false);
+  const [isConnecting, setIsConnecting] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [typingState, setTypingState] = useState<{ [phone: string]: boolean }>({});
   const [isTyping, setIsTyping] = useState(false);
@@ -145,8 +148,16 @@ export default function ChatClient({ clinicId }: ChatClientProps) {
       .then(resData => {
         if (resData.success) {
           setWhatsappStatus(resData.status);
+          if (resData.status === 'qr' && resData.qr) {
+            setQrCode(resData.qr);
+          } else {
+            setQrCode(null);
+          }
         }
-      }).catch(() => setWhatsappStatus('disconnected'));
+      }).catch(() => {
+        setWhatsappStatus('disconnected');
+        setQrCode(null);
+      });
 
     // Join room on mount
     socket.emit('join_clinic', clinicId);
@@ -209,6 +220,11 @@ export default function ChatClient({ clinicId }: ChatClientProps) {
 
     socket.on('whatsapp_status', (data) => {
       setWhatsappStatus(data.status);
+      if (data.status === 'qr' && data.qr) {
+        setQrCode(data.qr);
+      } else {
+        setQrCode(null);
+      }
     });
 
     return () => {
@@ -259,6 +275,33 @@ export default function ChatClient({ clinicId }: ChatClientProps) {
       }
     } catch (err) {
       console.error('Failed to toggle conversation mode:', err);
+    }
+  };
+
+  // WhatsApp connection handlers
+  const handleOpenConnectModal = () => {
+    setIsConnectModalOpen(true);
+    if (whatsappStatus === 'disconnected') {
+      handleInitSession();
+    }
+  };
+
+  const handleInitSession = async () => {
+    setIsConnecting(true);
+    try {
+      const response = await fetch(`${apiHost}/api/session/init`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ clinicId })
+      });
+      const resData = await response.json();
+      if (!resData.success) {
+        console.error('Failed to initialize session:', resData.error);
+      }
+    } catch (err) {
+      console.error('Error initializing WhatsApp session:', err);
+    } finally {
+      setIsConnecting(false);
     }
   };
 
@@ -364,20 +407,26 @@ export default function ChatClient({ clinicId }: ChatClientProps) {
             <h3 className="text-sm font-bold text-neutral-900">Mensajes de WhatsApp</h3>
           </div>
           
-          {/* AI Connection Badges */}
+          {/* AI Connection Badges & Connect Actions */}
           <div className="flex items-center">
             {whatsappStatus === 'connected' ? (
               <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-100 animate-pulse">
                 🟢 Live
               </span>
             ) : whatsappStatus === 'qr' ? (
-              <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-100 animate-pulse">
+              <button
+                onClick={handleOpenConnectModal}
+                className="flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-100 animate-pulse cursor-pointer hover:bg-amber-100 transition-all"
+              >
                 🟡 QR Listo
-              </span>
+              </button>
             ) : (
-              <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-50 text-rose-700 border border-rose-100">
+              <button
+                onClick={handleOpenConnectModal}
+                className="flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-50 text-rose-700 border border-rose-100 cursor-pointer hover:bg-rose-100 transition-all"
+              >
                 🔴 Offline
-              </span>
+              </button>
             )}
           </div>
         </div>
@@ -631,10 +680,28 @@ export default function ChatClient({ clinicId }: ChatClientProps) {
             </div>
           </>
         ) : (
-          <div className="flex-1 flex flex-col items-center justify-center p-8 text-neutral-400 text-center">
-            <MessageSquare className="h-12 w-12 text-neutral-250 animate-bounce mb-3" />
-            <h3 className="text-sm font-bold text-neutral-700">Bandeja Conversacional VetControl</h3>
-            <p className="text-[10px] text-neutral-500 max-w-xs mt-1">Selecciona una conversación del listado lateral para ver el chat, programar citas o tomar el control de la IA.</p>
+          <div className="flex-1 flex flex-col items-center justify-center p-8 text-neutral-400 text-center gap-4">
+            <div className="flex flex-col items-center justify-center">
+              <MessageSquare className="h-12 w-12 text-neutral-250 animate-bounce mb-3" />
+              <h3 className="text-sm font-bold text-neutral-700">Bandeja Conversacional VetControl</h3>
+              <p className="text-[10px] text-neutral-500 max-w-xs mt-1">Selecciona una conversación del listado lateral para ver el chat, programar citas o tomar el control de la IA.</p>
+            </div>
+            
+            {/* If not connected, invite to connect WhatsApp */}
+            {whatsappStatus !== 'connected' && (
+              <div className="mt-4 p-5 border border-neutral-100 rounded-2xl bg-white max-w-xs shadow-3xs flex flex-col items-center gap-3">
+                <span className="text-[10px] font-bold text-neutral-500">
+                  Estado de WhatsApp: {whatsappStatus === 'qr' ? '⚠️ QR Listo para Vincular' : '❌ Desconectado'}
+                </span>
+                <button
+                  onClick={handleOpenConnectModal}
+                  className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs py-2 px-4 rounded-xl cursor-pointer shadow-sm transition-all flex items-center justify-center gap-1.5"
+                >
+                  <RefreshCw className="h-3.5 w-3.5" />
+                  Conectar WhatsApp
+                </button>
+              </div>
+            )}
           </div>
         )}
       </div>
@@ -784,6 +851,102 @@ export default function ChatClient({ clinicId }: ChatClientProps) {
               Seleccione un cliente para ver su perfil
             </div>
           )}
+        </div>
+      )}
+
+      {/* WhatsApp Connection Modal Overlay */}
+      {isConnectModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-neutral-900/60 backdrop-blur-xs p-4 animate-fade-in">
+          <div 
+            className="bg-white rounded-3xl max-w-sm w-full border border-neutral-100 shadow-2xl p-6 relative flex flex-col items-center justify-center animate-scale-in"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Close Button */}
+            <button 
+              onClick={() => setIsConnectModalOpen(false)}
+              className="absolute top-4 right-4 text-neutral-400 hover:text-neutral-600 p-1 rounded-full hover:bg-neutral-50 cursor-pointer transition-all"
+            >
+              <X className="h-5 w-5" />
+            </button>
+
+            {/* Content */}
+            <div className="text-center w-full mt-2">
+              <h3 className="text-base font-bold text-neutral-900 flex items-center justify-center gap-1.5">
+                <MessageSquare className="h-5 w-5 text-emerald-600" />
+                Vincular WhatsApp
+              </h3>
+              <p className="text-xs text-neutral-500 mt-1 max-w-[280px] mx-auto">
+                Escanea el código QR desde tu aplicación móvil de WhatsApp para activar las notificaciones.
+              </p>
+
+              {/* QR Code Container */}
+              <div className="my-6 flex flex-col items-center justify-center min-h-[250px] relative">
+                {whatsappStatus === 'connected' ? (
+                  <div className="flex flex-col items-center justify-center gap-3 py-6 text-center">
+                    <div className="h-16 w-16 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center border border-emerald-100 shadow-xs animate-bounce">
+                      <Check className="h-8 w-8 stroke-[3]" />
+                    </div>
+                    <div>
+                      <span className="text-sm font-bold text-emerald-800 block">🟢 Conectado con éxito</span>
+                      <span className="text-[10px] text-neutral-400 font-semibold block mt-0.5">El panel conversacional ya está activo.</span>
+                    </div>
+                  </div>
+                ) : whatsappStatus === 'qr' && qrCode ? (
+                  <div className="bg-neutral-50 p-4 border border-neutral-100 rounded-2xl shadow-3xs">
+                    <img 
+                      src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(qrCode)}`}
+                      alt="WhatsApp QR Code"
+                      className="w-48 h-48 block"
+                    />
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center justify-center gap-3 text-neutral-450 text-center py-10">
+                    <Loader2 className="h-8 w-8 animate-spin text-emerald-500" />
+                    <span className="text-[10px] font-bold text-neutral-500">
+                      {isConnecting ? 'Inicializando canal...' : 'Esperando respuesta del servidor...'}
+                    </span>
+                  </div>
+                )}
+              </div>
+
+              {/* Instructions / Footer */}
+              {whatsappStatus !== 'connected' && (
+                <div className="bg-neutral-50 border border-neutral-100/50 rounded-xl p-3.5 text-left text-[10px] text-neutral-500 space-y-1.5 w-full">
+                  <div className="flex gap-2">
+                    <span className="font-extrabold text-neutral-700">1.</span>
+                    <span>Abre WhatsApp en tu teléfono.</span>
+                  </div>
+                  <div className="flex gap-2">
+                    <span className="font-extrabold text-neutral-700">2.</span>
+                    <span>Toca <strong className="text-neutral-700 font-bold">Menú o Configuración</strong> y selecciona <strong className="text-neutral-700 font-bold">Dispositivos vinculados</strong>.</span>
+                  </div>
+                  <div className="flex gap-2">
+                    <span className="font-extrabold text-neutral-700">3.</span>
+                    <span>Toca <strong className="text-neutral-700 font-bold">Vincular un dispositivo</strong> y apunta tu teléfono hacia la pantalla.</span>
+                  </div>
+                </div>
+              )}
+
+              {/* Action Buttons */}
+              <div className="mt-5 flex gap-2 w-full">
+                {whatsappStatus === 'disconnected' && !isConnecting && (
+                  <button
+                    onClick={handleInitSession}
+                    className="flex-1 bg-neutral-100 hover:bg-neutral-200 text-neutral-700 font-bold text-xs py-2.5 rounded-xl cursor-pointer transition-all shadow-3xs"
+                  >
+                    Reintentar
+                  </button>
+                )}
+                <button
+                  onClick={() => setIsConnectModalOpen(false)}
+                  className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs py-2.5 rounded-xl cursor-pointer transition-all shadow-md"
+                >
+                  {whatsappStatus === 'connected' ? 'Listo' : 'Cerrar'}
+                </button>
+              </div>
+
+            </div>
+          </div>
         </div>
       )}
 
