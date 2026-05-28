@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useTransition } from 'react';
+import React, { useState, useTransition, useEffect } from 'react';
 import { StatCard } from '@/components/dashboard/stat-card';
 import { AppointmentTable } from '@/components/dashboard/appointment-table';
 import { InventoryAlertCard } from '@/components/dashboard/inventory-alert-card';
@@ -10,6 +10,8 @@ import { Appointment, InventoryItem, RevenueData } from '@/types';
 import { updateAppointmentStatus } from '@/app/actions/appointments';
 import { Users, PawPrint, Calendar, AlertTriangle, Check, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { socket } from '@/src/lib/socket';
+
 
 interface DashboardClientProps {
   clientsCount: number;
@@ -50,6 +52,41 @@ export default function DashboardClient({
     setToast({ message, type });
     setTimeout(() => setToast(null), 3000);
   };
+
+  useEffect(() => {
+    socket.on("connect", () => {
+      console.log("✅ Socket Connected:", socket.id);
+    });
+
+    socket.on("new_message", (data) => {
+      console.log("📩 New Message:", data);
+      showToast(`Nuevo mensaje de +${data.phone || 'cliente'}: "${data.message || ''}"`);
+    });
+
+    socket.on("appointment_confirmed", (data) => {
+      console.log("✅ Appointment Confirmed:", data);
+      showToast(`Cita Confirmada para ${data.petName || 'Mascota'}`);
+    });
+
+    socket.on("appointment_cancelled", (data) => {
+      console.log("❌ Appointment Cancelled:", data);
+      showToast(`Cita Cancelada`);
+    });
+
+    socket.on("new_client", (data) => {
+      console.log("👤 New Client:", data);
+      showToast(`Nuevo cliente registrado: ${data.client?.name || ''}`);
+    });
+
+    return () => {
+      socket.off("connect");
+      socket.off("new_message");
+      socket.off("appointment_confirmed");
+      socket.off("appointment_cancelled");
+      socket.off("new_client");
+    };
+  }, []);
+
 
   // State-controlled tracking for restock and vaccine interactions
   const [reorderedIds, setReorderedIds] = useState<string[]>([]);

@@ -48,10 +48,12 @@ export function Sidebar({
     { name: 'Citas', href: '/appointments', icon: Calendar },
     { name: 'Inventario', href: '/inventory', icon: Package },
     { name: 'Ventas / Facturación', href: '/sales', icon: DollarSign },
+    { name: 'Chats en Vivo', href: '/chat', icon: MessageSquare },
     { name: 'WhatsApp', href: '/whatsapp', icon: MessageSquare },
     { name: 'Planes y Facturación', href: '/billing', icon: CreditCard },
     { name: 'Configuración', href: '/settings', icon: Settings },
   ];
+
 
   const isActive = (href: string) => {
     if (href === '/dashboard') {

@@ -5,6 +5,7 @@ import { createServerClient } from '@/src/lib/supabase';
 import { redirect } from 'next/navigation';
 import { getSubscriptionStatus } from '@/lib/subscription';
 import { TrialBanner } from '@/components/layout/trial-banner';
+import { RealtimeNotifier } from '@/components/layout/realtime-notifier';
 
 import { getProfileOrEnsure } from '@/lib/auth-utils';
 
@@ -24,10 +25,12 @@ export default async function DashboardLayout({ children }: DashboardLayoutProps
   // Fetch user profile and organization info (heals profile/organization automatically if missing)
   let profileName = 'Dr. E. Blackwell';
   let clinicName = 'VetControl Downtown';
+  let userOrgId = '';
 
   try {
     const { profile } = await getProfileOrEnsure();
     if (profile) {
+      userOrgId = profile.organization_id;
       if (profile.full_name) {
         profileName = profile.full_name;
       }
@@ -74,6 +77,10 @@ export default async function DashboardLayout({ children }: DashboardLayoutProps
           </div>
         </main>
       </div>
+
+      {/* Real-time Socket.io and Notification Widget */}
+      {userOrgId && <RealtimeNotifier clinicId={userOrgId} />}
     </div>
   );
 }
+
